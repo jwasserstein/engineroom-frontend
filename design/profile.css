@@ -168,64 +168,57 @@ body {
 }
 /* End Footer */
 
-/* Begin SignupPage */
-.SignupPage-container {
+/* Begin ProfilePage */
+.ProfilePage-container {
     width: 90%;
     max-width: 400px;
     margin: auto;
 }
 
-.SignupPage-blob {
+.ProfilePage-blob {
     background-color: white;
     border-radius: 22.5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
 }
 
-.SignupPage-title {
+.ProfilePage-title {
     padding: 10px;
     margin: 30px 0 20px 0;
 }
 
-.SignupPage-title h2 {
+.ProfilePage-title h2 {
     margin: 0 0 2px 0;
     font-weight: 500;
     font-size: 20px;
     text-align: center;
 }
 
-.SignupPage-title p {
+.ProfilePage-title p {
     margin: 0;
     text-align: center;
 }
 
-.SignupPage-form {
-    padding: 20px;
+.ProfilePage-options {
+    overflow: hidden;
 }
 
-.SignupPage-form input {
-    display: block;
-    width: 100%;
-    margin: 3px 0 15px 0;
-    border-radius: 15px;
-    box-sizing: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.35);
-    color: rgba(0, 0, 0, 0.35);
-    padding: 5px 10px;
-    font-size: 16px;
-}
-
-.SignupPage-form button {
-    width: 100%;
-    padding: 8px;
-    border-radius: 17.5px;
-    background-color: black;
-    color: white;
-    border: none;
+.ProfilePage-option {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.28);
     cursor: pointer;
-    font-size: 16px;
 }
 
-.SignupPage-form button:hover {
-    background-color: #424242;
+.ProfilePage-option:hover {
+    background-color: #EFEFEF;
 }
-/* End SignupPage */
+
+.ProfilePage-option.ProfilePage-delete {
+    background-color: #FFECEC;
+    border: none;
+}
+
+.ProfilePage-option.ProfilePage-delete:hover {
+    background-color: #FFD1D1;
+}
+/* End ProfilePage */
