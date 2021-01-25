@@ -5,6 +5,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #EAE8E5;
     font-size: 16px;
+    box-sizing: border-box;
 }
 /* Begin Navbar */
 .Navbar {

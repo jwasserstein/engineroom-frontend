@@ -168,90 +168,63 @@ body {
 }
 /* End Footer */
 
-/* Begin Hero */
-.LandingPage-Hero-image {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-position: 38% 70%;
-    background-size: cover;
+/* Begin LoginPage */
+.LoginPage-container {
+    width: 90%;
+    max-width: 400px;
+    margin: auto;
 }
 
-.LandingPage-Hero-text {
-    position: absolute;
-    top: 75px;
-    right: 190px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    color: white;
-    z-index: 1;
-}
-
-.LandingPage-Hero-text h1 {
-    margin: 0;
-    font-size: 36px;
-    text-align: center;
-    font-weight: 500;
-}
-
-.LandingPage-Hero-text p {
-    margin: 3px 0 25px 0;
-    font-size: 18px;
-    text-align: center;
-    width: 280px;
-}
-
-.LandingPage-Hero-text a {
-    text-decoration: none;
-    color: black;
+.LoginPage-blob {
     background-color: white;
-    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.12);
-    padding: 10px 30px;
-    font-size: 18px;
-    border-radius: 25px;
+    border-radius: 22.5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
 }
 
-.LandingPage-Hero-text a:hover {
-    background-color: #D7D7D7;
+.LoginPage-title {
+    padding: 10px;
+    margin: 30px 0 20px 0;
 }
 
-.LandingPage-main-container {
-    width: 100vw;
-    position: relative;
+.LoginPage-title h2 {
+    margin: 0 0 2px 0;
+    font-weight: 500;
+    text-align: center;
 }
 
-@media (max-width: 900px){
-    .LandingPage-Hero-text {
-        margin: 30px 15px;
-        position: static;
-    }
-
-    .LandingPage-Hero-text h1 {
-        margin: 0;
-        font-size: 28px;
-    }
-
-    .LandingPage-Hero-text p, 
-    .LandingPage-Hero-text a {
-        font-size: 16px;
-    }
-
-    .LandingPage-Hero-image {
-        height: 100%;
-    }
+.LoginPage-title p {
+    margin: 0;
+    text-align: center;
 }
 
-@media (max-height: 350px){
-    .LandingPage-Hero-image {
-        display: none;
-    }
-
-    .LandingPage-Hero-text {
-        flex-grow: 1;
-        justify-content: center;
-    }
+.LoginPage-form {
+    padding: 20px;
 }
-/* End Hero */
+
+.LoginPage-form input {
+    display: block;
+    width: 100%;
+    margin: 3px 0 15px 0;
+    border-radius: 15px;
+    box-sizing: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.35);
+    color: rgba(0, 0, 0, 0.35);
+    padding: 5px 10px;
+    font-size: 16px;
+}
+
+.LoginPage-form button {
+    width: 100%;
+    padding: 8px;
+    border-radius: 17.5px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.LoginPage-form button:hover {
+    background-color: #424242;
+}
+/* End LoginPage */
