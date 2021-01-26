@@ -6,6 +6,8 @@ body {
     background-color: #EAE8E5;
     font-size: 16px;
     box-sizing: border-box;
+    position: relative;
+    min-height: 100vh;
 }
 /* Begin Navbar */
 .Navbar {
@@ -228,6 +230,8 @@ body {
     border-bottom-left-radius: 22.5px;
     border-bottom-right-radius: 22.5px;
     margin: 7.5px;
+    color: black;
+    text-decoration: none;
 }
 
 .ExplorePage-person img {
@@ -241,5 +245,46 @@ body {
     font-weight: 500;
     font-size: 16px;
     margin: 10px 0;
+}
+
+.ExplorePage-car-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.ExplorePage-car {
+    background-color: white;
+    border-radius: 22.5px;
+    overflow: hidden;
+    width: 270px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
+    margin: 7.5px;
+    color: black;
+    text-decoration: none;
+}
+
+.ExplorePage-car img {
+    width: 100%;
+}
+
+.ExplorePage-car h3 {
+    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+    margin: 10px 0;
+}
+
+@media (max-width: 900px){
+    .ExplorePage-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ExplorePage-inner-container:first-of-type{
+        margin: 0;
+    }
 }
 /* End ExplorePage */

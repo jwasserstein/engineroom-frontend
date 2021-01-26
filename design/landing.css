@@ -6,6 +6,8 @@ body {
     background-color: #EAE8E5;
     font-size: 16px;
     box-sizing: border-box;
+    position: relative;
+    min-height: 100vh;
 }
 /* Begin Navbar */
 .Navbar {
