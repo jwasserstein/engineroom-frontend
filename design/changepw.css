@@ -211,9 +211,12 @@ body {
     border-radius: 15px;
     box-sizing: border-box;
     border: 1px solid rgba(0, 0, 0, 0.35);
-    color: rgba(0, 0, 0, 0.35);
     padding: 5px 10px;
     font-size: 16px;
+}
+
+::placeholder {
+    color: rgba(0, 0, 0, 0.35);
 }
 
 .ChangePasswordPage-form button {
