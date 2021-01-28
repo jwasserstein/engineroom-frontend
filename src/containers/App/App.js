@@ -4,6 +4,7 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import LandingPage from '../LandingPage';
 import AboutPage from '../AboutPage';
+import SignupPage from '../SignupPage';
 import './App.css';
 
 class App extends Component {
@@ -27,6 +28,7 @@ class App extends Component {
                 <Router>
                     <Navbar username='@jwasserstein' logOut={() => {}} />
                     <Switch>
+                        <Route path='/signup' component={SignupPage} />
                         <Route path='/about' component={AboutPage} />
                         <Route path='/' component={LandingPage} />
                     </Switch>
