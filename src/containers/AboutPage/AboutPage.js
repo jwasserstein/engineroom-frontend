@@ -8,13 +8,13 @@ class AboutPage extends Component {
 
     render() {
         return (
-            <div class='AboutPage-container'>
-                <div class='AboutPage-title AboutPage-blob'>
+            <div className='AboutPage-container'>
+                <div className='AboutPage-title AboutPage-blob'>
                     <h2>About</h2>
                     <p>Learn the story of EngineRoom</p>
                 </div>
 
-                <div class='AboutPage-about AboutPage-blob'>
+                <div className='AboutPage-about AboutPage-blob'>
                     <p>
                         EngineRoom is a demonstration social media application made for 
                         the purposes of learning React and Redux. It allows users to add 
@@ -26,7 +26,7 @@ class AboutPage extends Component {
                         <li><strong>Backend</strong>: Node.js and Express</li>
                         <li><strong>Database</strong>: MongoDB</li>
                     </ul>
-                    <p class='AboutPage-handcrafted'>Hand-crafted with <span class='AboutPage-heart'>❤</span> in Glastonbury, Connecticut.</p>
+                    <p className='AboutPage-handcrafted'>Hand-crafted with <span className='AboutPage-heart'>❤</span> in Glastonbury, Connecticut.</p>
                 </div>
             </div>
         );

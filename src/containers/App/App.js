@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {logOut} from '../../store/actions/auth';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import LandingPage from '../LandingPage';
@@ -24,10 +27,12 @@ class App extends Component {
     }
     
     render() {
+        const {username, logOut} = this.props;
+
         return (
             <div className="App">
                 <Router>
-                    <Navbar username={''} logOut={() => {}} />
+                    <Navbar username={username} logOut={logOut} />
                     <Switch>
                         <Route path='/login' component={LoginPage} />
                         <Route path='/signup' component={SignupPage} />
@@ -41,4 +46,15 @@ class App extends Component {
     }
 }
 
-export default App;
+function mapStateToProps(state){
+	return {
+		username: state?.authReducer?.username
+	};
+}
+
+App.propTypes = {
+    username: PropTypes.string,
+	logOut: PropTypes.func.isRequired
+};
+
+export default connect(mapStateToProps, {logOut})(App);
