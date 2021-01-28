@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import LandingPage from '../LandingPage';
 import AboutPage from '../AboutPage';
 import SignupPage from '../SignupPage';
+import LoginPage from '../LoginPage';
 import './App.css';
 
 class App extends Component {
@@ -26,8 +27,9 @@ class App extends Component {
         return (
             <div className="App">
                 <Router>
-                    <Navbar username='@jwasserstein' logOut={() => {}} />
+                    <Navbar username={''} logOut={() => {}} />
                     <Switch>
+                        <Route path='/login' component={LoginPage} />
                         <Route path='/signup' component={SignupPage} />
                         <Route path='/about' component={AboutPage} />
                         <Route path='/' component={LandingPage} />
