@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import LandingPage from '../LandingPage';
+import AboutPage from '../AboutPage';
 import './App.css';
 
 class App extends Component {
@@ -26,6 +27,7 @@ class App extends Component {
                 <Router>
                     <Navbar username='@jwasserstein' logOut={() => {}} />
                     <Switch>
+                        <Route path='/about' component={AboutPage} />
                         <Route path='/' component={LandingPage} />
                     </Switch>
                     <Footer />
