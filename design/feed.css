@@ -179,6 +179,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     padding-top: 30px;
+    margin-bottom: 20px;
 }
 
 .FeedPage-friends-container {
@@ -361,13 +362,22 @@ body {
     margin-right: 2px;
 }
 
-.FeedPage-comments-arrow {
+.FeedPage-comments-arrow-expanded {
     display: inline-block;
     width: 6px;
     height: 6px;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
     transform: translateX(-5px) translateY(-3px) rotate(-135deg);
+}
+
+.FeedPage-comments-arrow-collapsed {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid black;
+    border-bottom: 2px solid black;
+    transform: translateX(-5px) translateY(-3px) rotate(45deg);
 }
 
 .FeedPage-comment-container>div:first-of-type {
@@ -388,6 +398,7 @@ body {
 
 .FeedPage-comment>span {
     color: #AA4A4A;
+    cursor: pointer;
 }
 
 .FeedPage-comment>img {
@@ -417,6 +428,10 @@ body {
 
 ::placeholder {
     color: rgba(0, 0, 0, 0.35);
+}
+
+.FeedPage-like-green {
+    color: #39883C;
 }
 
 @media (max-width: 900px){
