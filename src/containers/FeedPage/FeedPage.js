@@ -1,40 +1,47 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {apiCall} from '../../services/api';
+import {getPosts} from '../../store/actions/posts';
+import {getUsers} from '../../store/actions/auth';
+import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
 import User from '../../components/User';
 import Post from '../../components/Post';
 import './FeedPage.css';
 
 class FeedPage extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            cars: [],
-            users: []
-        };
-    }
-
     componentDidMount(){
         document.title = 'EngineRoom | Feed';
-        apiCall('get', '/auth/random/6', {})
-            .then(users => this.setState({...this.state, users}))
-            .catch(err => console.log(err));
-        apiCall('get', '/cars/random/4', {})
-            .then(cars => this.setState({...this.state, cars}))
-            .catch(err => console.log(err));
+        
+        if(this.props.postsLastUpdated === 0) {
+            this.props.getPosts();
+        }
+        if(this.props.usersLastUpdated === 0){
+            this.props.getUsers(6);
+        }
+        if(this.props.carsLastUpdated === 0){
+            this.props.getCars(4);
+        }
     }
 
     render() {
-        const {userImage} = this.props;
-        const {cars, users} = this.state;
+        const {userImage, posts, users, cars} = this.props;
 
         const carElements = cars.map(c => (
             <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
         ));
         const userElements = users.map(u => (
             <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} width='125' />
+        ));
+        const postElements = posts.map(p => (
+            <Post 
+                postUser={p.user}
+                postDate={p.date}
+                postText={p.text}
+                postLikes={p.likers.length}
+                postComments={p.comments}
+                userId={p.user._id}
+            />
         ));
 
         return (
@@ -44,9 +51,7 @@ class FeedPage extends Component {
                         <h2>Explore Friends</h2>
                     </div>
                     <div className='FeedPage-people-container'>
-                        
                         {userElements}
-
                     </div>
                 </div>
                 <div className='FeedPage-feed-container'>
@@ -55,27 +60,17 @@ class FeedPage extends Component {
                         <p>See what your friends are talking about</p>
                     </div>
                     <div className='FeedPage-post-form FeedPage-blob'>
-                        <img src={userImage} alt='me' />
+                        <img src={userImage} alt='profile picture' />
                         <textarea placeholder='Add a post...'></textarea>
                     </div>
-
-                    <Post 
-                        postName='Jane Doe'
-                        postDate='2021-01-28T21:16:56.427Z'
-                        postText='Just crashed my car!  Oops!'
-                        postLikes={3}
-                        postComments={[]}
-                    />
-
+                    {postElements}
                 </div>
                 <div className='FeedPage-cars-container'>
                     <div className='FeedPage-title FeedPage-blob'>
                         <h2>Explore Cars</h2>
                     </div>
                     <div className='FeedPage-car-container'>
-                        
                         {carElements}
-
                     </div>
                 </div>
             </div>
@@ -85,12 +80,27 @@ class FeedPage extends Component {
 
 function mapStateToProps(state){
     return {
-        userImage: state.authReducer.imageUrl
+        userImage: state.authReducer.imageUrl,
+        posts: state.postReducer.posts,
+        postsLastUpdated: state.postReducer.lastUpdated,
+        users: state.authReducer.users,
+        usersLastUpdated: state.authReducer.usersLastUpdated,
+        cars: state.carReducer.cars,
+        carsLastUpdated: state.carReducer.lastUpdated
     };
 }
 
 FeedPage.propTypes = {
-    userImage: PropTypes.string
+    userImage: PropTypes.string,
+    getPosts: PropTypes.func.isRequired,
+    posts: PropTypes.array,
+    postsLastUpdated: PropTypes.number,
+    getUsers: PropTypes.func.isRequired,
+    users: PropTypes.array,
+    usersLastUpdated: PropTypes.number,
+    getCars: PropTypes.func.isRequired,
+    cars: PropTypes.array,
+    carsLastUpdated: PropTypes.number
 };
 
-export default connect(mapStateToProps)(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getCars})(FeedPage);
