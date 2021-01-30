@@ -10,6 +10,8 @@ class SignupPage extends Component {
     constructor(props){
 		super(props);
 		this.state = {
+			firstName: '',
+			lastName: '',
 			username: '',
 			password: '',
 			repeatPassword: '',
@@ -28,11 +30,13 @@ class SignupPage extends Component {
 	
 	onSubmit = e => {
 		e.preventDefault();
+		const {password, repeatPassword, username, firstName, lastName} = this.state;
+
 		this.setState({...this.state, loading: true});
-		if(this.state.password !== this.state.repeatPassword){
+		if(password !== repeatPassword){
 			return this.setState({...this.state, loading: false, error: "Your passwords don't match"});
 		}
-		this.props.signUp(this.state.username, this.state.password)
+		this.props.signUp(username, password, firstName, lastName)
 			.then(() => {
 				this.setState({...this.state, loading: false, error: ''});
 				this.props.history.push('/feed');
@@ -43,9 +47,11 @@ class SignupPage extends Component {
 	}
 
     render() {
-        const {username, password, repeatPassword, error, loading} = this.state;
+        const {firstName, lastName, username, password, repeatPassword, error, loading} = this.state;
 
 		const fields = [
+			{label: 'First Name', name: 'firstName', type: 'text', value: firstName, placeholder: 'John'},
+			{label: 'Last Name', name: 'lastName', type: 'text', value: lastName, placeholder: 'Doe'},
 			{label: 'Username', name: 'username', type: 'text', value: username, placeholder: 'mikeybob123'},
 			{label: 'Password', name: 'password', type: 'password', value: password, placeholder: '********'},
 			{label: 'Repeat Password', name: 'repeatPassword', type: 'password', value: repeatPassword, placeholder: '********'}

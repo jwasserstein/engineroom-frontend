@@ -22,11 +22,11 @@ export function logIn(username, password) {
 	}
 }
 
-export function signUp(username, password){
+export function signUp(username, password, firstName, lastName){
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('post', '/auth/signup', {username, password});
+				const resp = await apiCall('post', '/auth/signup', {username, password, firstName, lastName});
 				if(resp.error){
 					return reject(resp.error);
 				}

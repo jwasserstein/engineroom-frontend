@@ -46,7 +46,7 @@ class Navbar extends Component{
 					</div>
 					{username ?
 						<div className='Navbar-links-right'>
-							<Link onClick={this.closeMenu} to='/profile' className='Navbar-link'>{username}</Link>
+							<Link onClick={this.closeMenu} to='/profile' className='Navbar-link'>@{username}</Link>
 							<Link onClick={() => {
 								this.closeMenu(); 
 								logOut();
