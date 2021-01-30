@@ -3,12 +3,14 @@ import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import {logOut} from '../../store/actions/auth';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
+import withAuth from '../../hocs/withAuth';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import LandingPage from '../LandingPage';
 import AboutPage from '../AboutPage';
 import SignupPage from '../SignupPage';
 import LoginPage from '../LoginPage';
+import ExplorePage from '../ExplorePage';
 import './App.css';
 
 class App extends Component {
@@ -34,6 +36,7 @@ class App extends Component {
                 <Router>
                     <Navbar username={username} logOut={logOut} />
                     <Switch>
+                        <Route path='/explore' component={withAuth(ExplorePage)} />
                         <Route path='/login' component={LoginPage} />
                         <Route path='/signup' component={SignupPage} />
                         <Route path='/about' component={AboutPage} />
