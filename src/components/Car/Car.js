@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {Link} from 'react-router-dom';
 import './Car.css';
 
-const Car = ({name, imageUrl, userId}) => (
-    <a className='Car-car' href={`/users/${userId}/cars`}>
+const Car = ({name, imageUrl, userId, width=270}) => (
+    <Link className='Car-car' to={`/users/${userId}/cars`} style={{width: `${width}px`}}>
         <img src={imageUrl} alt={name} />
         <h3>{name}</h3>
-    </a>
+    </Link>
 );
 
 Car.propTypes = {
