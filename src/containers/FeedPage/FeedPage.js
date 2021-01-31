@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getPosts} from '../../store/actions/posts';
-import {getUsers} from '../../store/actions/auth';
+import {getUsers} from '../../store/actions/users';
 import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
 import User from '../../components/User';
@@ -25,7 +25,7 @@ class FeedPage extends Component {
     }
 
     render() {
-        const {userImage, posts, users, cars} = this.props;
+        const {userImage, userFirstName, userLastName, posts, users, cars} = this.props;
 
         const carElements = cars.map(c => (
             <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
@@ -41,6 +41,7 @@ class FeedPage extends Component {
                 postLikes={p.likers.length}
                 postComments={p.comments}
                 userId={p.user._id}
+                key={p.user._id+p.text}
             />
         ));
 
@@ -60,7 +61,7 @@ class FeedPage extends Component {
                         <p>See what your friends are talking about</p>
                     </div>
                     <div className='FeedPage-post-form FeedPage-blob'>
-                        <img src={userImage} alt='profile picture' />
+                        <img src={userImage} alt={userFirstName + ' ' + userLastName} />
                         <textarea placeholder='Add a post...'></textarea>
                     </div>
                     {postElements}
@@ -81,10 +82,12 @@ class FeedPage extends Component {
 function mapStateToProps(state){
     return {
         userImage: state.authReducer.imageUrl,
+        userFirstName: state.authReducer.firstName,
+        userLastName: state.authReducer.lastName,
         posts: state.postReducer.posts,
         postsLastUpdated: state.postReducer.lastUpdated,
-        users: state.authReducer.users,
-        usersLastUpdated: state.authReducer.usersLastUpdated,
+        users: state.userReducer.users,
+        usersLastUpdated: state.userReducer.lastUpdated,
         cars: state.carReducer.cars,
         carsLastUpdated: state.carReducer.lastUpdated
     };
@@ -100,7 +103,9 @@ FeedPage.propTypes = {
     usersLastUpdated: PropTypes.number,
     getCars: PropTypes.func.isRequired,
     cars: PropTypes.array,
-    carsLastUpdated: PropTypes.number
+    carsLastUpdated: PropTypes.number,
+    userFirstName: PropTypes.string,
+    userLastName: PropTypes.string
 };
 
 export default connect(mapStateToProps, {getPosts, getUsers, getCars})(FeedPage);

@@ -1,30 +1,25 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import PropTypes from 'prop-types';
+import {getUsers} from '../../store/actions/users';
+import {getCars} from '../../store/actions/cars';
 import User from '../../components/User';
 import Car from '../../components/Car';
-import {apiCall} from '../../services/api';
 import './ExplorePage.css';
 
 class ExplorePage extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            users: [],
-            cars: []
-        };
-    }
-
     componentDidMount(){
         document.title = 'EngineRoom | Explore';
-        apiCall('get', '/auth/random/6', {})
-            .then(users => this.setState({...this.state, users}))
-            .catch(err => console.log(err));
-        apiCall('get', '/cars/random/4', {})
-            .then(cars => this.setState({...this.state, cars}))
-            .catch(err => console.log(err));
+        if(this.props.usersLastUpdated === 0){
+            this.props.getUsers(6);
+        }
+        if(this.props.carsLastUpdated === 0){
+            this.props.getCars(4);
+        }
     }
 
     render() {
-        const {cars, users} = this.state;
+        const {cars, users} = this.props;
         
         const carElements = cars.map(c => (
             <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} />
@@ -58,4 +53,22 @@ class ExplorePage extends Component {
     }
 }
 
-export default ExplorePage;
+function mapStateToProps(state){
+    return {
+        users: state.userReducer.users,
+        usersLastUpdated: state.userReducer.lastUpdated,
+        cars: state.carReducer.cars,
+        carsLastUpdated: state.carReducer.lastUpdated
+    };
+}
+
+ExplorePage.propTypes = {
+    getCars: PropTypes.func.isRequired,
+    getUsers: PropTypes.func.isRequired,
+    users: PropTypes.array,
+    usersLastUpdated: PropTypes.number,
+    cars: PropTypes.array,
+    carsLastUpdated: PropTypes.number
+};
+
+export default connect(mapStateToProps, {getCars, getUsers})(ExplorePage);

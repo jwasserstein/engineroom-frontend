@@ -1,22 +1,38 @@
-import {LOG_OUT, LOG_IN, GET_USERS} from '../actionTypes';
+import {LOG_OUT, LOG_IN} from '../actionTypes';
 
 const DEFAULT_STATE = {
 	userId: '',
 	username: '',
+	joinDate: 0,
 	imageUrl: '',
-	users: [],
-	usersLastUpdated: 0,
+	firstName: '',
+	lastName: '',
+	bio: '',
+	cars: [],
+	friends: [],
+	posts: [],
 	loggedInAt: 0
 }
 
 export function authReducer(state=DEFAULT_STATE, action){
 	switch (action.type){
 		case LOG_IN:
-			return {...state, userId: action.id, username: action.username, joinDate: action.joinDate, imageUrl: action.imageUrl, loggedInAt: Date.now()};
+			return {
+				...state, 
+				userId: action.id, 
+				username: action.username, 
+				joinDate: action.joinDate, 
+				imageUrl: action.imageUrl,
+				firstName: action.firstName,
+				lastName: action.lastName,
+				bio: action.bio,
+				cars: action.cars,
+				friends: action.friends,
+				posts: action.posts,
+				loggedInAt: Date.now()
+			};
 		case LOG_OUT:
-			return {...state, userId: '', username: '', joinDate: 0, imageUrl: '', loggedInAt: 0};
-		case GET_USERS:
-			return {...state, users: action.users, usersLastUpdated: Date.now()}
+			return DEFAULT_STATE;
 		default: 
 			return state;
 	}

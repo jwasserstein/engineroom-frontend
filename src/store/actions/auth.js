@@ -1,4 +1,4 @@
-import {LOG_IN, LOG_OUT, GET_USERS} from '../actionTypes';
+import {LOG_IN, LOG_OUT} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function logIn(username, password) {
@@ -47,23 +47,5 @@ export function logOut() {
 	return dispatch => {
 		localStorage.removeItem('token');
 		dispatch({type: LOG_OUT});
-	}
-}
-
-export function getUsers(n){
-	return dispatch => {
-		return new Promise(async (resolve, reject) => {
-			try {
-				const resp = await apiCall('get', `/auth/random/${n}`, {});
-				if(resp.error){
-					return reject(resp.error);
-				}
-				
-				dispatch({type: GET_USERS, users: resp});
-				return resolve();
-			} catch(err) {
-				return reject(err.message);
-			}
-		});
 	}
 }

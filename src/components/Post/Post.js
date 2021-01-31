@@ -44,7 +44,7 @@ const Post = ({postUser, postDate, postText, postLikes, postComments, userId}) =
 };
 
 Post.propTypes = {
-    postName: PropTypes.string.isRequired,
+    postUser: PropTypes.object.isRequired,
     postDate: PropTypes.string.isRequired,
     postText: PropTypes.string.isRequired,
     postLikes: PropTypes.number.isRequired,
