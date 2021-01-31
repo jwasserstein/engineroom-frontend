@@ -89,6 +89,20 @@
     margin-left: 10px;
 }
 
+.FeedPage-post-form button {
+    background-color: black;
+    border: none;
+    color: white;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    align-self: center;
+    margin-left: 10px;
+    cursor: pointer;
+    
+}
+
 .FeedPage-post-form ::placeholder {
     color: rgba(0, 0, 0, 0.35);
 }

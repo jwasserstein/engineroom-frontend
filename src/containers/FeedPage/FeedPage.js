@@ -90,6 +90,7 @@ class FeedPage extends Component {
                     <form className='FeedPage-post-form FeedPage-blob' onSubmit={this.onPostSubmit}>
                         <img src={userImage} alt={userFirstName + ' ' + userLastName} />
                         <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
+                        <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                     </form>
                     {postElements}
                 </div>

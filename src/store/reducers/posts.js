@@ -1,4 +1,4 @@
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, REMOVE_POSTS} from '../actionTypes';
 
 const DEFAULT_STATE = {
 	posts: [],
@@ -19,6 +19,8 @@ export function postReducer(state=DEFAULT_STATE, action){
 				return p;
 			});
 			return {...state, posts: newPosts, lastUpdated: Date.now()};
+		case REMOVE_POSTS:
+			return DEFAULT_STATE;
 		default: 
 			return state;
 	}

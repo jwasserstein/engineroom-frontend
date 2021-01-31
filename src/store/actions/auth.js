@@ -1,4 +1,4 @@
-import {LOG_IN, LOG_OUT} from '../actionTypes';
+import {LOG_IN, LOG_OUT, REMOVE_CARS, REMOVE_POSTS, REMOVE_USERS} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function logIn(username, password) {
@@ -46,6 +46,9 @@ export function signUp(username, password, firstName, lastName){
 export function logOut() {
 	return dispatch => {
 		localStorage.removeItem('token');
+		dispatch({type: REMOVE_CARS});
+		dispatch({type: REMOVE_POSTS});
+		dispatch({type: REMOVE_USERS});
 		dispatch({type: LOG_OUT});
 	}
 }
