@@ -1,4 +1,4 @@
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, REMOVE_POSTS, ADD_COMMENT} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, REMOVE_POSTS, ADD_COMMENT, REMOVE_COMMENT} from '../actionTypes';
 
 const DEFAULT_STATE = {
 	posts: [],
@@ -26,7 +26,15 @@ export function postReducer(state=DEFAULT_STATE, action){
 				}
 				return p;
 			});
-			return {...state, posts: newPosts2, lastUpdated: Date.now()}
+			return {...state, posts: newPosts2, lastUpdated: Date.now()};
+		case REMOVE_COMMENT:
+			const newPosts3 = state.posts.map(p => {
+				if(p._id === action.postId){
+					return {...p, comments: p.comments.filter(c => c._id !== action.commentId)};
+				}
+				return p;
+			});
+			return {...state, posts: newPosts3, lastUpdated: Date.now()};
 		case REMOVE_POSTS:
 			return DEFAULT_STATE;
 		default: 

@@ -1,5 +1,5 @@
 import {apiCall} from '../../services/api';
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT, REMOVE_COMMENT} from '../actionTypes';
 
 export function getPosts() {
 	return dispatch => {
@@ -61,6 +61,23 @@ export function createComment(text, postId) {
 					return reject(comment.error);
 				}
 				dispatch({type: ADD_COMMENT, comment, postId});
+				return resolve();
+			} catch(err) {
+				return reject(err.message);
+			}
+		});
+	}
+}
+
+export function deleteComment(commentId, postId) {
+	return dispatch => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const comment = await apiCall('delete', `/posts/${postId}/comments/${commentId}`);
+				if(comment.error){
+					return reject(comment.error);
+				}
+				dispatch({type: REMOVE_COMMENT, commentId: comment._id, postId});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

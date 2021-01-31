@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getPosts, createPost, togglePostLike, createComment} from '../../store/actions/posts';
+import {getPosts, createPost, togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
 import {getUsers} from '../../store/actions/users';
 import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
@@ -20,6 +20,7 @@ class FeedPage extends Component {
         this.onLike = this.onLike.bind(this);
         this.onPostSubmit = this.onPostSubmit.bind(this);
         this.onCommentSubmit = this.onCommentSubmit.bind(this);
+        this.onCommentDelete = this.onCommentDelete.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
@@ -51,6 +52,10 @@ class FeedPage extends Component {
         this.props.createComment(text, postId)
     }
 
+    onCommentDelete(commentId, postId){
+        this.props.deleteComment(commentId, postId);
+    }
+
     onChange(e){
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
@@ -76,6 +81,7 @@ class FeedPage extends Component {
                 userId={userId}
                 onLike={this.onLike.bind(this, p._id)}
                 onCommentSubmit={this.onCommentSubmit}
+                onCommentDelete={this.onCommentDelete}
                 key={p.user._id+p.text}
             />
         ));
@@ -145,7 +151,8 @@ FeedPage.propTypes = {
     userFirstName: PropTypes.string,
     userLastName: PropTypes.string,
     togglePostLike: PropTypes.func.isRequired,
-    createComment: PropTypes.func.isRequired
+    createComment: PropTypes.func.isRequired,
+    deleteComment: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost, createComment})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);
