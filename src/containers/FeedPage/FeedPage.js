@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getPosts, togglePostLike} from '../../store/actions/posts';
+import {getPosts, createPost, togglePostLike} from '../../store/actions/posts';
 import {getUsers} from '../../store/actions/users';
 import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
@@ -13,7 +13,13 @@ class FeedPage extends Component {
     constructor(props){
         super(props);
 
+        this.state = {
+            postText: ''
+        };
+
         this.onLike = this.onLike.bind(this);
+        this.onPostSubmit = this.onPostSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount(){
@@ -34,8 +40,18 @@ class FeedPage extends Component {
         this.props.togglePostLike(postId);
     }
 
+    onPostSubmit(e){
+        e.preventDefault();
+        this.props.createPost(this.state.postText);
+    }
+
+    onChange(e){
+        this.setState({...this.state, [e.target.name]: e.target.value});
+    }
+
     render() {
         const {userId, userImage, userFirstName, userLastName, posts, users, cars} = this.props;
+        const {postText} = this.state;
 
         const carElements = cars.map(c => (
             <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
@@ -71,10 +87,10 @@ class FeedPage extends Component {
                         <h2>Your Feed</h2>
                         <p>See what your friends are talking about</p>
                     </div>
-                    <div className='FeedPage-post-form FeedPage-blob'>
+                    <form className='FeedPage-post-form FeedPage-blob' onSubmit={this.onPostSubmit}>
                         <img src={userImage} alt={userFirstName + ' ' + userLastName} />
-                        <textarea placeholder='Add a post...'></textarea>
-                    </div>
+                        <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
+                    </form>
                     {postElements}
                 </div>
                 <div className='FeedPage-cars-container'>
@@ -122,4 +138,4 @@ FeedPage.propTypes = {
     togglePostLike: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost})(FeedPage);

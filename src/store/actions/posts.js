@@ -1,5 +1,5 @@
 import {apiCall} from '../../services/api';
-import {GET_POSTS, TOGGLE_POST_LIKE} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST} from '../actionTypes';
 
 export function getPosts() {
 	return dispatch => {
@@ -26,7 +26,24 @@ export function togglePostLike(postId) {
 				if(likers.error){
 					return reject(likers.error);
 				}
-				dispatch({type: TOGGLE_POST_LIKE, likers: likers, postId: postId});
+				dispatch({type: TOGGLE_POST_LIKE, likers, postId});
+				return resolve();
+			} catch(err) {
+				return reject(err.message);
+			}
+		});
+	}
+}
+
+export function createPost(text) {
+	return dispatch => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const post = await apiCall('post', `/posts`, {text});
+				if(post.error){
+					return reject(post.error);
+				}
+				dispatch({type: ADD_POST, post});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
