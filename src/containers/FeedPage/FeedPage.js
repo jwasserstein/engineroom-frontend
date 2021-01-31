@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getPosts, createPost, togglePostLike} from '../../store/actions/posts';
+import {getPosts, createPost, togglePostLike, createComment} from '../../store/actions/posts';
 import {getUsers} from '../../store/actions/users';
 import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
@@ -19,6 +19,7 @@ class FeedPage extends Component {
 
         this.onLike = this.onLike.bind(this);
         this.onPostSubmit = this.onPostSubmit.bind(this);
+        this.onCommentSubmit = this.onCommentSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
     }
 
@@ -45,6 +46,11 @@ class FeedPage extends Component {
         this.props.createPost(this.state.postText);
     }
 
+    onCommentSubmit(e, text, postId){
+        e.preventDefault();
+        this.props.createComment(text, postId)
+    }
+
     onChange(e){
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
@@ -61,6 +67,7 @@ class FeedPage extends Component {
         ));
         const postElements = posts.map(p => (
             <Post 
+                postId={p._id}
                 postUser={p.user}
                 postDate={p.date}
                 postText={p.text}
@@ -68,6 +75,7 @@ class FeedPage extends Component {
                 postComments={p.comments}
                 userId={userId}
                 onLike={this.onLike.bind(this, p._id)}
+                onCommentSubmit={this.onCommentSubmit}
                 key={p.user._id+p.text}
             />
         ));
@@ -136,7 +144,8 @@ FeedPage.propTypes = {
     carsLastUpdated: PropTypes.number,
     userFirstName: PropTypes.string,
     userLastName: PropTypes.string,
-    togglePostLike: PropTypes.func.isRequired
+    togglePostLike: PropTypes.func.isRequired,
+    createComment: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost, createComment})(FeedPage);

@@ -3,13 +3,13 @@ import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import './Post.css';
 
-const Post = ({postUser, postDate, postText, postLikes, postComments, userId, onLike}) => {
+const Post = ({postId, postUser, postDate, postText, postLikes, postComments, userId, onLike, onCommentSubmit}) => {
     const commentElements = postComments.map(c => (
         <div className='Post-comment' key={c.user?.firstName + c.user?.lastName + c.text}>
             {c.user?._id === userId ? (
                 <span>X</span>
             ) : (
-                <span> </span>
+                <span></span>
             )}
             <img src={c.user?.imageUrl} alt={c.user?.firstName + ' ' + c.user?.lastName} />
             <div>
@@ -20,6 +20,13 @@ const Post = ({postUser, postDate, postText, postLikes, postComments, userId, on
     ));
 
     const [expanded, setExpanded] = useState(false);
+    const [text, setText] = useState('');
+
+
+    function onSubmit(e){
+        onCommentSubmit(e, text, postId); 
+        setText('');
+    }
 
     return (
         <div className='Post-post Post-blob'>
@@ -45,7 +52,10 @@ const Post = ({postUser, postDate, postText, postLikes, postComments, userId, on
             </div>
             <div className='Post-comment-container' style={expanded ? undefined : {display: 'none'}}>
                 {commentElements}
-                <input className='Post-comment-input' type='text' placeholder='Add a comment...' />
+                <form className='Post-comment-form' onSubmit={onSubmit}>
+                    <input className='Post-comment-input' type='text' placeholder='Add a comment...' value={text} onChange={e => setText(e.target.value)} />
+                    <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
+                </form>
             </div>
         </div>
     );

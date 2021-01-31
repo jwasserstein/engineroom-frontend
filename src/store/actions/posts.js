@@ -1,5 +1,5 @@
 import {apiCall} from '../../services/api';
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT} from '../actionTypes';
 
 export function getPosts() {
 	return dispatch => {
@@ -44,6 +44,23 @@ export function createPost(text) {
 					return reject(post.error);
 				}
 				dispatch({type: ADD_POST, post});
+				return resolve();
+			} catch(err) {
+				return reject(err.message);
+			}
+		});
+	}
+}
+
+export function createComment(text, postId) {
+	return dispatch => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const comment = await apiCall('post', `/posts/${postId}/comments`, {text});
+				if(comment.error){
+					return reject(comment.error);
+				}
+				dispatch({type: ADD_COMMENT, comment, postId});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
