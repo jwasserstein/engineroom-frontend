@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import './Post.css';
 
-const Post = ({postUser, postDate, postText, postLikes, postComments, userId}) => {
+const Post = ({postUser, postDate, postText, postLikes, postComments, userId, onLike}) => {
     const commentElements = postComments.map(c => (
         <div className='Post-comment' key={c.user?.firstName + c.user?.lastName + c.text}>
             {c.user?._id === userId ? (
@@ -19,6 +19,8 @@ const Post = ({postUser, postDate, postText, postLikes, postComments, userId}) =
         </div>
     ));
 
+    const [expanded, setExpanded] = useState(false);
+
     return (
         <div className='Post-post Post-blob'>
             <div className='Post-post-user'>
@@ -32,10 +34,16 @@ const Post = ({postUser, postDate, postText, postLikes, postComments, userId}) =
                 {postText}
             </p>
             <div className='Post-like-container'>
-                <div><i className="fa fa-thumbs-up" aria-hidden="true"></i>{postLikes} likes</div>
-                <div><div className='Post-comments-arrow-expanded'></div>{postComments.length} comments</div>
+                <div onClick={onLike} className={postLikes.includes(userId) ? 'Post-like-green' : undefined}>
+                    <i className="fa fa-thumbs-up" aria-hidden="true"></i>
+                    {postLikes.length} likes
+                </div>
+                <div onClick={() => setExpanded(!expanded)}>
+                    <div className={expanded ? 'Post-comments-arrow-expanded' : 'Post-comments-arrow-collapsed'}></div>
+                    {postComments.length} comments
+                </div>
             </div>
-            <div className='Post-comment-container'>
+            <div className='Post-comment-container' style={expanded ? undefined : {display: 'none'}}>
                 {commentElements}
                 <input className='Post-comment-input' type='text' placeholder='Add a comment...' />
             </div>
@@ -47,8 +55,9 @@ Post.propTypes = {
     postUser: PropTypes.object.isRequired,
     postDate: PropTypes.string.isRequired,
     postText: PropTypes.string.isRequired,
-    postLikes: PropTypes.number.isRequired,
-    postComments: PropTypes.array.isRequired
+    postLikes: PropTypes.array.isRequired,
+    postComments: PropTypes.array.isRequired,
+    onLike: PropTypes.func.isRequired
 };
 
 export default Post;

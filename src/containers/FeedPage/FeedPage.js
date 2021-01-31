@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getPosts} from '../../store/actions/posts';
+import {getPosts, togglePostLike} from '../../store/actions/posts';
 import {getUsers} from '../../store/actions/users';
 import {getCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
@@ -10,6 +10,12 @@ import Post from '../../components/Post';
 import './FeedPage.css';
 
 class FeedPage extends Component {
+    constructor(props){
+        super(props);
+
+        this.onLike = this.onLike.bind(this);
+    }
+
     componentDidMount(){
         document.title = 'EngineRoom | Feed';
         
@@ -24,8 +30,12 @@ class FeedPage extends Component {
         }
     }
 
+    onLike(postId){
+        this.props.togglePostLike(postId);
+    }
+
     render() {
-        const {userImage, userFirstName, userLastName, posts, users, cars} = this.props;
+        const {userId, userImage, userFirstName, userLastName, posts, users, cars} = this.props;
 
         const carElements = cars.map(c => (
             <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
@@ -38,9 +48,10 @@ class FeedPage extends Component {
                 postUser={p.user}
                 postDate={p.date}
                 postText={p.text}
-                postLikes={p.likers.length}
+                postLikes={p.likers}
                 postComments={p.comments}
-                userId={p.user._id}
+                userId={userId}
+                onLike={this.onLike.bind(this, p._id)}
                 key={p.user._id+p.text}
             />
         ));
@@ -81,6 +92,7 @@ class FeedPage extends Component {
 
 function mapStateToProps(state){
     return {
+        userId: state.authReducer.userId,
         userImage: state.authReducer.imageUrl,
         userFirstName: state.authReducer.firstName,
         userLastName: state.authReducer.lastName,
@@ -94,6 +106,7 @@ function mapStateToProps(state){
 }
 
 FeedPage.propTypes = {
+    userId: PropTypes.string,
     userImage: PropTypes.string,
     getPosts: PropTypes.func.isRequired,
     posts: PropTypes.array,
@@ -105,7 +118,8 @@ FeedPage.propTypes = {
     cars: PropTypes.array,
     carsLastUpdated: PropTypes.number,
     userFirstName: PropTypes.string,
-    userLastName: PropTypes.string
+    userLastName: PropTypes.string,
+    togglePostLike: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getCars})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike})(FeedPage);

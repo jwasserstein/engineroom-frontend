@@ -57,7 +57,7 @@
     height: 6px;
     border-right: 2px solid black;
     border-bottom: 2px solid black;
-    transform: translateX(-5px) translateY(-3px) rotate(-135deg);
+    transform: translateX(-5px) rotate(-135deg);
 }
 
 .Post-comments-arrow-collapsed {
