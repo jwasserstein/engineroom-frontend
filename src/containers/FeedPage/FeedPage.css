@@ -102,6 +102,10 @@
     cursor: pointer;
 }
 
+.FeedPage-post-form button:hover {
+    background-color: #424242;
+}
+
 .FeedPage-post-form ::placeholder {
     color: rgba(0, 0, 0, 0.35);
 }

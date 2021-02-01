@@ -12,6 +12,7 @@ import SignupPage from '../SignupPage';
 import LoginPage from '../LoginPage';
 import ExplorePage from '../ExplorePage';
 import FeedPage from '../FeedPage';
+import WallPage from '../WallPage';
 import './App.css';
 
 class App extends Component {
@@ -37,6 +38,7 @@ class App extends Component {
                 <Router>
                     <Navbar username={username} logOut={logOut} />
                     <Switch>
+                        <Route path='/users/:userId' component={withAuth(WallPage)} />
                         <Route path='/feed' component={withAuth(FeedPage)} />
                         <Route path='/explore' component={withAuth(ExplorePage)} />
                         <Route path='/login' component={LoginPage} />

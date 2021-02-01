@@ -7,6 +7,7 @@ export const REMOVE_POSTS = 'REMOVE_POSTS';
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const REMOVE_COMMENT = 'REMOVE_COMMENT';
 export const GET_USERS = 'GET_USERS';
+export const GET_USER = 'GET_USER';
 export const REMOVE_USERS = 'REMOVE_USERS';
 export const GET_CARS = 'GET_CARS';
 export const REMOVE_CARS = 'REMOVE_CARS';

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import './Post.css';
 
@@ -33,18 +34,18 @@ const Post = ({postId, postUser, postDate, postText, postLikes, postComments, us
 
     return (
         <div className='Post-post Post-blob'>
-            <div className='Post-post-user'>
+            <Link className='Post-post-user' to={`/users/${postUser._id}`}>
                 <img src={postUser.imageUrl} alt={postUser.firstName + ' ' + postUser.lastName} />
                 <div>
                     <p>{postUser.firstName} {postUser.lastName}</p>
                     <p className='Post-post-date'>{dayjs(postDate).fromNow()}</p>
                 </div>
-            </div>
+            </Link>
             <p className='Post-post-text'>
                 {postText}
             </p>
             <div className='Post-like-container'>
-                <div onClick={onLike} className={postLikes.includes(userId) ? 'Post-like-green' : undefined}>
+                <div onClick={() => onLike(postId)} className={postLikes.includes(userId) ? 'Post-like-green' : undefined}>
                     <i className="fa fa-thumbs-up" aria-hidden="true"></i>
                     {postLikes.length} likes
                 </div>

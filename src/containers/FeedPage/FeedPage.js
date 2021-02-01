@@ -79,7 +79,7 @@ class FeedPage extends Component {
                 postLikes={p.likers}
                 postComments={p.comments}
                 userId={userId}
-                onLike={this.onLike.bind(this, p._id)}
+                onLike={this.onLike}
                 onCommentSubmit={this.onCommentSubmit}
                 onCommentDelete={this.onCommentDelete}
                 key={p.user._id+p.text}
