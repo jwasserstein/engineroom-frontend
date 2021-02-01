@@ -5,6 +5,7 @@ import {getUser} from '../../store/actions/users';
 import {togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
 import Car from '../../components/Car';
 import Post from '../../components/Post';
+import UserAside from '../../components/UserAside';
 import './WallPage.css';
 
 class WallPage extends Component {
@@ -70,7 +71,14 @@ class WallPage extends Component {
             <div className='WallPage-container'>
                 <div className='WallPage-user-container'>
                     
-                    {/* User Aside */}
+                    <UserAside 
+                        firstName={user.firstName}
+                        lastName={user.lastName}
+                        username={user.username}
+                        bio={user.bio}
+                        userId={user._id}
+                        userImageUrl={user.imageUrl}
+                    />
 
                 </div>
 
