@@ -1,15 +1,26 @@
 import {apiCall} from '../../services/api';
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT, REMOVE_COMMENT} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT, REMOVE_COMMENT, GET_FEED_POSTS} from '../actionTypes';
 
-export function getPosts() {
+export function getPosts(ids) {
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('get', '/posts', {});
+				let path = '/posts';
+				if(ids && ids.length > 0){
+					path += '?ids=' + JSON.stringify(ids);
+				}
+				const resp = await apiCall('get', path);
 				if(resp.error){
 					return reject(resp.error);
 				}
-				dispatch({type: GET_POSTS, posts: resp});
+
+				const postObj = {};
+				for(let i = 0; i < resp.posts.length; i++){
+					postObj[resp.posts[i]._id] = resp.posts[i];
+				}
+
+				dispatch({type: GET_POSTS, posts: postObj});
+				if('feedPostIds' in resp) dispatch({type: GET_FEED_POSTS, feedPostIds: resp.feedPostIds});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

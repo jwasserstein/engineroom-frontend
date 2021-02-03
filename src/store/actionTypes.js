@@ -1,6 +1,7 @@
 export const LOG_IN = 'LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const GET_POSTS = 'GET_POSTS';
+export const GET_FEED_POSTS = 'GET_FEED_POSTS';
 export const ADD_POST = 'ADD_POST';
 export const TOGGLE_POST_LIKE = 'TOGGLE_POST_LIKE';
 export const REMOVE_POSTS = 'REMOVE_POSTS';
