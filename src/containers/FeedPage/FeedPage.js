@@ -80,7 +80,6 @@ class FeedPage extends Component {
 
         const postElements = postReducer.feedPostIds.map(id => {
             const p = postReducer.posts[id];
-            console.log(p.user, userReducer.users[p.user]);
             return (
                 <Post 
                     postId={p._id}
@@ -114,7 +113,7 @@ class FeedPage extends Component {
                         <p>See what your friends are talking about</p>
                     </div>
                     <form className='FeedPage-post-form FeedPage-blob' onSubmit={this.onPostSubmit}>
-                        <img src={user.imageUrl} alt={user.firstName + ' ' + user.lastName} />
+                        <img src={userReducer.users[user.userId].imageUrl} alt={userReducer.users[user.userId].firstName + ' ' + userReducer.users[user.userId].lastName} />
                         <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
                         <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                     </form>

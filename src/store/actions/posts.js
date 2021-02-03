@@ -1,5 +1,5 @@
 import {apiCall} from '../../services/api';
-import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT, REMOVE_COMMENT, GET_FEED_POSTS} from '../actionTypes';
+import {GET_POSTS, TOGGLE_POST_LIKE, ADD_POST, ADD_COMMENT, REMOVE_COMMENT, GET_FEED_POSTS, GET_USERS} from '../actionTypes';
 
 export function getPosts(ids) {
 	return dispatch => {
@@ -19,7 +19,13 @@ export function getPosts(ids) {
 					postObj[resp.posts[i]._id] = resp.posts[i];
 				}
 
+				const userObj = {};
+				for(let i = 0 ; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+
 				dispatch({type: GET_POSTS, posts: postObj});
+				dispatch({type: GET_USERS, users: userObj});
 				if('feedPostIds' in resp) dispatch({type: GET_FEED_POSTS, feedPostIds: resp.feedPostIds});
 				return resolve();
 			} catch(err) {

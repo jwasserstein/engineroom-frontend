@@ -3,8 +3,6 @@ import {LOG_OUT, LOG_IN} from '../actionTypes';
 const DEFAULT_STATE = {
 	userId: '',
 	username: '',
-	joinDate: 0,
-	imageUrl: '',
 	firstName: '',
 	lastName: '',
 	bio: '',
@@ -21,8 +19,6 @@ export function authReducer(state=DEFAULT_STATE, action){
 				...state, 
 				userId: action.id, 
 				username: action.username, 
-				joinDate: action.joinDate, 
-				imageUrl: action.imageUrl,
 				firstName: action.firstName,
 				lastName: action.lastName,
 				bio: action.bio,
