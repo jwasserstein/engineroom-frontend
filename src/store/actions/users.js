@@ -1,4 +1,4 @@
-import {GET_USERS, GET_USER} from '../actionTypes';
+import {GET_USERS, GET_RANDOM_USERS} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function getUsers(n){
@@ -9,8 +9,14 @@ export function getUsers(n){
 				if(resp.error){
 					return reject(resp.error);
 				}
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
 				
-				dispatch({type: GET_USERS, users: resp});
+				dispatch({type: GET_USERS, users: userObj});
+				dispatch({type: GET_RANDOM_USERS, randomUserIds: resp.randomUserIds});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
@@ -28,7 +34,7 @@ export function getUser(userId){
 					return reject(user.error);
 				}
 				
-				dispatch({type: GET_USER, user, userId});
+				dispatch({type: GET_USERS, user, userId});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
