@@ -67,7 +67,12 @@ export function toggleFriend(friendId){
 					return reject(resp.error);
 				}
 
-				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				
+				dispatch({type: GET_USERS, users: userObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

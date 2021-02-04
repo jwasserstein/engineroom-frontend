@@ -13,8 +13,14 @@ export function logIn(username, password) {
 					return reject('Error getting token');
 				}
 				localStorage.setItem('token', resp.token);
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				
 				dispatch({type: LOG_IN, id: resp.id, username: resp.username});
-				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
+				dispatch({type: GET_USERS, users: userObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
@@ -35,8 +41,14 @@ export function signUp(username, password, firstName, lastName){
 					return reject('Error getting token');
 				}
 				localStorage.setItem('token', resp.token);
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				
 				dispatch({type: LOG_IN, id: resp.id, username: resp.username});
-				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
+				dispatch({type: GET_USERS, users: userObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
