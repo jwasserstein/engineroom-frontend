@@ -77,6 +77,14 @@
     background-color: #424242;
 }
 
+.WallPage-friend-btn.WallPage-remove-btn {
+    background-color: #AA4A4A;
+}
+
+.WallPage-friend-btn.WallPage-remove-btn:hover {
+    background-color: #C66E6E;
+}
+
 @media (max-width: 900px){
     .WallPage-user {
         margin: auto;

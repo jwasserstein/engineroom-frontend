@@ -52,7 +52,7 @@ class WallPage extends Component {
     }
 
     render() {
-        const {userReducer, carReducer, postReducer, match} = this.props;
+        const {userReducer, carReducer, postReducer, authReducer, match} = this.props;
         const user = userReducer.users?.[match.params.userId];
 
         if(!user) return <div>Loading...</div>;
@@ -94,6 +94,7 @@ class WallPage extends Component {
                         bio={user.bio}
                         userId={user._id}
                         userImageUrl={user.imageUrl}
+                        alreadyFriend={authReducer.user.friends.includes(match.params.userId)}
                     />
                 </div>
 
@@ -120,7 +121,8 @@ function mapStateToProps(state){
     return {
         userReducer: state.userReducer,
         carReducer: state.carReducer,
-        postReducer: state.postReducer
+        postReducer: state.postReducer,
+        authReducer: state.authReducer
     };
 }
 
@@ -128,6 +130,7 @@ WallPage.propTypes = {
     userReducer: PropTypes.object,
     carReducer: PropTypes.object,
     postReducer: PropTypes.object,
+    authReducer: PropTypes.object,
     getUser: PropTypes.func.isRequired,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
