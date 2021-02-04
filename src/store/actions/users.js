@@ -1,4 +1,4 @@
-import {GET_USERS, GET_RANDOM_USERS, GET_CARS, GET_POSTS, LOG_IN} from '../actionTypes';
+import {GET_USERS, GET_RANDOM_USERS, GET_CARS, GET_POSTS} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function getRandomUsers(n){
@@ -67,7 +67,7 @@ export function toggleFriend(friendId){
 					return reject(resp.error);
 				}
 
-				dispatch({type: LOG_IN, id: resp.id, username: resp.username, user: resp.user});
+				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

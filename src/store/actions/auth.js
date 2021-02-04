@@ -1,4 +1,4 @@
-import {LOG_IN, LOG_OUT, REMOVE_CARS, REMOVE_POSTS, REMOVE_USERS} from '../actionTypes';
+import {LOG_IN, LOG_OUT, REMOVE_CARS, REMOVE_POSTS, REMOVE_USERS, GET_USERS} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function logIn(username, password) {
@@ -13,7 +13,8 @@ export function logIn(username, password) {
 					return reject('Error getting token');
 				}
 				localStorage.setItem('token', resp.token);
-				dispatch({type: LOG_IN, ...resp});
+				dispatch({type: LOG_IN, id: resp.id, username: resp.username});
+				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
@@ -34,7 +35,8 @@ export function signUp(username, password, firstName, lastName){
 					return reject('Error getting token');
 				}
 				localStorage.setItem('token', resp.token);
-				dispatch({type: LOG_IN, ...resp});
+				dispatch({type: LOG_IN, id: resp.id, username: resp.username});
+				dispatch({type: GET_USERS, users: {[resp.user._id]: resp.user}});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

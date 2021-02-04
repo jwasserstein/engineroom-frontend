@@ -62,9 +62,10 @@ class FeedPage extends Component {
     }
 
     render() {
-        const {user, postReducer, userReducer, carReducer} = this.props;
+        const {authReducer, postReducer, userReducer, carReducer} = this.props;
         const {postText} = this.state;
 
+        const user = userReducer.users[authReducer.userId];
         if(!user) return <div>Loading...</div>;
 
 
@@ -91,7 +92,8 @@ class FeedPage extends Component {
                     postText={p.text}
                     postLikes={p.likers}
                     postComments={p.comments}
-                    userId={user._id}
+                    loggedInUserId={user._id}
+                    users={userReducer.users}
                     onLike={this.onLike}
                     onCommentSubmit={this.onCommentSubmit}
                     onCommentDelete={this.onCommentDelete}
@@ -137,7 +139,7 @@ class FeedPage extends Component {
 
 function mapStateToProps(state){
     return {
-        user: state.authReducer.user,
+        authReducer: state.authReducer,
         postReducer: state.postReducer,
         userReducer: state.userReducer,
         carReducer: state.carReducer
@@ -145,7 +147,6 @@ function mapStateToProps(state){
 }
 
 FeedPage.propTypes = {
-    user: PropTypes.object,
     postReducer: PropTypes.object,
     userReducer: PropTypes.object,
     carReducer: PropTypes.object,

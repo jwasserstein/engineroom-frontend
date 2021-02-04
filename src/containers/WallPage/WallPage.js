@@ -80,7 +80,8 @@ class WallPage extends Component {
                     postText={p.text}
                     postLikes={p.likers}
                     postComments={p.comments}
-                    userId={user._id}
+                    loggedInUserId={authReducer.userId}
+                    users={userReducer.users}
                     onLike={this.onLike}
                     onCommentSubmit={this.onCommentSubmit}
                     onCommentDelete={this.onCommentDelete}
@@ -100,8 +101,8 @@ class WallPage extends Component {
                         userId={user._id}
                         userImageUrl={user.imageUrl}
                         onFriend={this.onFriend}
-                        alreadyFriend={authReducer.user.friends.includes(match.params.userId)}
-                        loggedInUserId={authReducer.user._id}
+                        alreadyFriend={userReducer.users[authReducer.userId].friends.includes(match.params.userId)}
+                        loggedInUserId={authReducer.userId}
                     />
                 </div>
 

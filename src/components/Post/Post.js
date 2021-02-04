@@ -7,21 +7,24 @@ import './Post.css';
 
 dayjs.extend(relativeTime);
 
-const Post = ({postId, postUser, postDate, postText, postLikes, postComments, userId, onLike, onCommentSubmit, onCommentDelete}) => {
-    const commentElements = postComments.map(c => (
-        <div className='Post-comment' key={postUser.firstName + postUser.lastName + c.text}>
-            {postUser._id === userId ? (
-                <span onClick={() => onCommentDelete(c._id, postId)}>X</span>
-            ) : (
-                <span></span>
-            )}
-            <img src={postUser.imageUrl} alt={postUser.firstName + ' ' + postUser.lastName} />
-            <div>
-                <span>{postUser.firstName} {postUser.lastName} - {dayjs(c.date).fromNow()}</span>
-                <p>{c.text}</p>
+const Post = ({postId, postUser, postDate, postText, postLikes, postComments, loggedInUserId, onLike, onCommentSubmit, onCommentDelete, users}) => {
+    const commentElements = postComments.map(c => {
+        const cUser = users[c.user];
+        return (
+            <div className='Post-comment' key={cUser.firstName + cUser.lastName + c.text}>
+                {cUser._id === loggedInUserId ? (
+                    <span onClick={() => onCommentDelete(c._id, postId)}>X</span>
+                ) : (
+                    <span></span>
+                )}
+                <img src={cUser.imageUrl} alt={cUser.firstName + ' ' + cUser.lastName} />
+                <div>
+                    <span>{cUser.firstName} {cUser.lastName} - {dayjs(c.date).fromNow()}</span>
+                    <p>{c.text}</p>
+                </div>
             </div>
-        </div>
-    ));
+        )
+    });
 
     const [expanded, setExpanded] = useState(false);
     const [text, setText] = useState('');
@@ -45,7 +48,7 @@ const Post = ({postId, postUser, postDate, postText, postLikes, postComments, us
                 {postText}
             </p>
             <div className='Post-like-container'>
-                <div onClick={() => onLike(postId)} className={postLikes.includes(userId) ? 'Post-like-green' : undefined}>
+                <div onClick={() => onLike(postId)} className={postLikes.includes(loggedInUserId) ? 'Post-like-green' : undefined}>
                     <i className="fa fa-thumbs-up" aria-hidden="true"></i>
                     {postLikes.length} likes
                 </div>
@@ -71,7 +74,8 @@ Post.propTypes = {
     postText: PropTypes.string.isRequired,
     postLikes: PropTypes.array.isRequired,
     postComments: PropTypes.array.isRequired,
-    onLike: PropTypes.func.isRequired
+    onLike: PropTypes.func.isRequired,
+    users: PropTypes.object.isRequired
 };
 
 export default Post;
