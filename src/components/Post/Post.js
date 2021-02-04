@@ -9,15 +9,15 @@ dayjs.extend(relativeTime);
 
 const Post = ({postId, postUser, postDate, postText, postLikes, postComments, userId, onLike, onCommentSubmit, onCommentDelete}) => {
     const commentElements = postComments.map(c => (
-        <div className='Post-comment' key={c.user?.firstName + c.user?.lastName + c.text}>
-            {c.user?._id === userId ? (
+        <div className='Post-comment' key={postUser.firstName + postUser.lastName + c.text}>
+            {postUser._id === userId ? (
                 <span onClick={() => onCommentDelete(c._id, postId)}>X</span>
             ) : (
                 <span></span>
             )}
-            <img src={c.user?.imageUrl} alt={c.user?.firstName + ' ' + c.user?.lastName} />
+            <img src={postUser.imageUrl} alt={postUser.firstName + ' ' + postUser.lastName} />
             <div>
-                <span>{c.user?.firstName} {c.user?.lastName} - {dayjs(c.date).fromNow()}</span>
+                <span>{postUser.firstName} {postUser.lastName} - {dayjs(c.date).fromNow()}</span>
                 <p>{c.text}</p>
             </div>
         </div>
@@ -56,7 +56,7 @@ const Post = ({postId, postUser, postDate, postText, postLikes, postComments, us
             </div>
             <div className='Post-comment-container' style={expanded ? undefined : {display: 'none'}}>
                 {commentElements}
-                <form className='Post-comment-form' onSubmit={onSubmit}>
+                <form className='Post-comment-form' onSubmit={e => {onSubmit(e); setText('')}}>
                     <input className='Post-comment-input' type='text' placeholder='Add a comment...' value={text} onChange={e => setText(e.target.value)} />
                     <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                 </form>

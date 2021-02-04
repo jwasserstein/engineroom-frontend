@@ -10,23 +10,31 @@ import './ExplorePage.css';
 class ExplorePage extends Component {
     componentDidMount(){
         document.title = 'EngineRoom | Explore';
-        if(this.props.usersLastUpdated === 0){
+        if(this.props.userReducer.lastUpdated === 0){
             this.props.getUsers(6);
         }
-        if(this.props.carsLastUpdated === 0){
+        if(this.props.carReducer.lastUpdated === 0){
             this.props.getCars(4);
         }
     }
 
     render() {
-        const {cars, users} = this.props;
+        const {carReducer, userReducer} = this.props;
+
+        if(!carReducer.lastUpdated || !userReducer.lastUpdated) return <div>Loading...</div>;
         
-        const carElements = cars.map(c => (
-            <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} />
-        ));
-        const userElements = users.map(u => (
-            <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} />
-        ));
+        const carElements = carReducer.randomCarIds.map(id => {
+            const c = carReducer.cars[id];
+            return (
+                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} />
+            )
+        });
+        const userElements = userReducer.randomUserIds.map(id => {
+            const u = userReducer.users[id];
+            return (
+                <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} />
+            )
+        });
 
         return (
             <div className='ExplorePage-container'>
@@ -55,20 +63,16 @@ class ExplorePage extends Component {
 
 function mapStateToProps(state){
     return {
-        users: state.userReducer.users,
-        usersLastUpdated: state.userReducer.lastUpdated,
-        cars: state.carReducer.cars,
-        carsLastUpdated: state.carReducer.lastUpdated
+        userReducer: state.userReducer,
+        carReducer: state.carReducer
     };
 }
 
 ExplorePage.propTypes = {
     getCars: PropTypes.func.isRequired,
     getUsers: PropTypes.func.isRequired,
-    users: PropTypes.array,
-    usersLastUpdated: PropTypes.number,
-    cars: PropTypes.array,
-    carsLastUpdated: PropTypes.number
+    userReducer: PropTypes.object,
+    carReducer: PropTypes.object
 };
 
 export default connect(mapStateToProps, {getCars, getUsers})(ExplorePage);

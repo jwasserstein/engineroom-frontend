@@ -27,13 +27,13 @@ class FeedPage extends Component {
     componentDidMount(){
         document.title = 'EngineRoom | Feed';
         
-        if(this.props.postsLastUpdated === 0) {
+        if(this.props.postReducer.lastUpdated === 0) {
             this.props.getPosts();
         }
-        if(this.props.usersLastUpdated === 0){
+        if(this.props.userReducer.lastUpdated === 0){
             this.props.getUsers(6);
         }
-        if(this.props.carsLastUpdated === 0){
+        if(this.props.carReducer.lastUpdated === 0){
             this.props.getCars(4);
         }
     }
@@ -45,6 +45,7 @@ class FeedPage extends Component {
     onPostSubmit(e){
         e.preventDefault();
         this.props.createPost(this.state.postText);
+        this.setState({...this.state, postText: ''});
     }
 
     onCommentSubmit(e, text, postId){
@@ -61,30 +62,43 @@ class FeedPage extends Component {
     }
 
     render() {
-        const {userId, userImage, userFirstName, userLastName, posts, users, cars} = this.props;
+        const {user, postReducer, userReducer, carReducer} = this.props;
         const {postText} = this.state;
 
-        const carElements = cars.map(c => (
-            <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
-        ));
-        const userElements = users.map(u => (
-            <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} width='125' />
-        ));
-        const postElements = posts.map(p => (
-            <Post 
-                postId={p._id}
-                postUser={p.user}
-                postDate={p.date}
-                postText={p.text}
-                postLikes={p.likers}
-                postComments={p.comments}
-                userId={userId}
-                onLike={this.onLike}
-                onCommentSubmit={this.onCommentSubmit}
-                onCommentDelete={this.onCommentDelete}
-                key={p.user._id+p.text}
-            />
-        ));
+        if(!user) return <div>Loading...</div>;
+
+
+        const carElements = carReducer.randomCarIds.map(id => {
+            const c = carReducer.cars[id];
+            return (
+                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
+            )
+        });
+        const userElements = userReducer.randomUserIds.map(id => {
+            const u = userReducer.users[id];
+            return (
+                <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} width='125'/>
+            )
+        });
+
+        const postElements = postReducer.feedPostIds.map(id => {
+            const p = postReducer.posts[id];
+            return (
+                <Post 
+                    postId={p._id}
+                    postUser={userReducer.users[p.user]}
+                    postDate={p.date}
+                    postText={p.text}
+                    postLikes={p.likers}
+                    postComments={p.comments}
+                    userId={user._id}
+                    onLike={this.onLike}
+                    onCommentSubmit={this.onCommentSubmit}
+                    onCommentDelete={this.onCommentDelete}
+                    key={p.user._id+p.text}
+                />
+            )
+        });
 
         return (
             <div className='FeedPage-container'>
@@ -102,7 +116,7 @@ class FeedPage extends Component {
                         <p>See what your friends are talking about</p>
                     </div>
                     <form className='FeedPage-post-form FeedPage-blob' onSubmit={this.onPostSubmit}>
-                        <img src={userImage} alt={userFirstName + ' ' + userLastName} />
+                        <img src={user.imageUrl} alt={user.firstName + ' ' + user.lastName} />
                         <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
                         <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                     </form>
@@ -123,33 +137,21 @@ class FeedPage extends Component {
 
 function mapStateToProps(state){
     return {
-        userId: state.authReducer.userId,
-        userImage: state.authReducer.imageUrl,
-        userFirstName: state.authReducer.firstName,
-        userLastName: state.authReducer.lastName,
-        posts: state.postReducer.posts,
-        postsLastUpdated: state.postReducer.lastUpdated,
-        users: state.userReducer.users,
-        usersLastUpdated: state.userReducer.lastUpdated,
-        cars: state.carReducer.cars,
-        carsLastUpdated: state.carReducer.lastUpdated
+        user: state.authReducer.user,
+        postReducer: state.postReducer,
+        userReducer: state.userReducer,
+        carReducer: state.carReducer
     };
 }
 
 FeedPage.propTypes = {
-    userId: PropTypes.string,
-    userImage: PropTypes.string,
+    user: PropTypes.object,
+    postReducer: PropTypes.object,
+    userReducer: PropTypes.object,
+    carReducer: PropTypes.object,
     getPosts: PropTypes.func.isRequired,
-    posts: PropTypes.array,
-    postsLastUpdated: PropTypes.number,
     getUsers: PropTypes.func.isRequired,
-    users: PropTypes.array,
-    usersLastUpdated: PropTypes.number,
     getCars: PropTypes.func.isRequired,
-    cars: PropTypes.array,
-    carsLastUpdated: PropTypes.number,
-    userFirstName: PropTypes.string,
-    userLastName: PropTypes.string,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired
