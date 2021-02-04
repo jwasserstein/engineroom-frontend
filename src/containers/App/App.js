@@ -31,12 +31,12 @@ class App extends Component {
     }
     
     render() {
-        const {username, logOut} = this.props;
+        const {username, userId, logOut} = this.props;
 
         return (
             <div className="App">
                 <Router>
-                    <Navbar username={username} logOut={logOut} />
+                    <Navbar username={username} userId={userId} logOut={logOut} />
                     <Switch>
                         <Route path='/users/:userId' component={withAuth(WallPage)} />
                         <Route path='/feed' component={withAuth(FeedPage)} />
@@ -55,12 +55,14 @@ class App extends Component {
 
 function mapStateToProps(state){
 	return {
-		username: state?.authReducer?.username
+        username: state?.authReducer?.username,
+        userId: state?.authReducer?.userId,
 	};
 }
 
 App.propTypes = {
     username: PropTypes.string,
+    userId: PropTypes.string,
 	logOut: PropTypes.func.isRequired
 };
 

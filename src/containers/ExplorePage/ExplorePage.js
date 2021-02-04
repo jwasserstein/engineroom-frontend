@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getUsers} from '../../store/actions/users';
-import {getCars} from '../../store/actions/cars';
+import {getRandomCars} from '../../store/actions/cars';
 import User from '../../components/User';
 import Car from '../../components/Car';
 import './ExplorePage.css';
@@ -14,7 +14,7 @@ class ExplorePage extends Component {
             this.props.getUsers(6);
         }
         if(this.props.carReducer.lastUpdated === 0){
-            this.props.getCars(4);
+            this.props.getRandomCars(4);
         }
     }
 
@@ -69,10 +69,10 @@ function mapStateToProps(state){
 }
 
 ExplorePage.propTypes = {
-    getCars: PropTypes.func.isRequired,
+    getRandomCars: PropTypes.func.isRequired,
     getUsers: PropTypes.func.isRequired,
     userReducer: PropTypes.object,
     carReducer: PropTypes.object
 };
 
-export default connect(mapStateToProps, {getCars, getUsers})(ExplorePage);
+export default connect(mapStateToProps, {getRandomCars, getUsers})(ExplorePage);

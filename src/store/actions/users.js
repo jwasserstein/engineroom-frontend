@@ -1,4 +1,4 @@
-import {GET_USERS, GET_RANDOM_USERS} from '../actionTypes';
+import {GET_USERS, GET_RANDOM_USERS, GET_CARS, GET_POSTS} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
 export function getUsers(n){
@@ -29,12 +29,27 @@ export function getUser(userId){
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const user = await apiCall('get', `/users/${userId}`, {});
-				if(user.error){
-					return reject(user.error);
+				const resp = await apiCall('get', `/users/${userId}`, {});
+				if(resp.error){
+					return reject(resp.error);
 				}
 				
-				dispatch({type: GET_USERS, user, userId});
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				const carObj = {};
+				for(let i = 0; i < resp.cars.length; i++){
+					carObj[resp.cars[i]._id] = resp.cars[i];
+				}
+				const postObj = {};
+				for(let i = 0; i < resp.posts.length; i++){
+					postObj[resp.posts[i]._id] = resp.posts[i];
+				}
+				
+				dispatch({type: GET_USERS, users: userObj});
+				dispatch({type: GET_CARS, cars: carObj});
+				dispatch({type: GET_POSTS, posts: postObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

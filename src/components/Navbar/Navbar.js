@@ -24,7 +24,7 @@ class Navbar extends Component{
 	}
 
 	render() {
-		const {username, logOut} = this.props;
+		const {username, userId, logOut} = this.props;
 		const {menuActive} = this.state;
 
 		return (
@@ -39,7 +39,7 @@ class Navbar extends Component{
 
 					<Link onClick={this.closeMenu} to='/' className='Navbar-brand'><h1><i className="fa fa-car" aria-hidden="true"></i>EngineRoom</h1></Link>
 					<div className='Navbar-links-left'>
-						<Link onClick={this.closeMenu} to='/wall' className='Navbar-link'>Your Wall</Link>
+						<Link onClick={this.closeMenu} to={`/users/${userId}`} className='Navbar-link'>Your Wall</Link>
 						<Link onClick={this.closeMenu} to='/feed' className='Navbar-link'>Your Feed</Link>
 						<Link onClick={this.closeMenu} to='/explore' className='Navbar-link'>Explore</Link>
 						<Link onClick={this.closeMenu} to='/about' className='Navbar-link'>About</Link>
@@ -64,6 +64,7 @@ class Navbar extends Component{
 
 Navbar.propTypes = {
 	username: PropTypes.string,
+	userId: PropTypes.string,
 	logOut: PropTypes.func.isRequired
 };
 

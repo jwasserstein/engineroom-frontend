@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getPosts, createPost, togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
 import {getUsers} from '../../store/actions/users';
-import {getCars} from '../../store/actions/cars';
+import {getRandomCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
 import User from '../../components/User';
 import Post from '../../components/Post';
@@ -34,7 +34,7 @@ class FeedPage extends Component {
             this.props.getUsers(6);
         }
         if(this.props.carReducer.lastUpdated === 0){
-            this.props.getCars(4);
+            this.props.getRandomCars(4);
         }
     }
 
@@ -151,10 +151,10 @@ FeedPage.propTypes = {
     carReducer: PropTypes.object,
     getPosts: PropTypes.func.isRequired,
     getUsers: PropTypes.func.isRequired,
-    getCars: PropTypes.func.isRequired,
+    getRandomCars: PropTypes.func.isRequired,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getUsers, getRandomCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);
