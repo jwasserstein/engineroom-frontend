@@ -17,8 +17,9 @@ if(localStorage.getItem('token')){
 	if(Date.now()/1000 - decoded.iat < 3600){
         store.dispatch({type: LOG_IN, ...decoded});
         apiCall('get', `/users/${decoded.id}`)
-            .then(user => {
-                store.dispatch({type: LOG_IN, ...decoded, ...user});
+            .then(users => {
+                const user = users.users.find(u => u._id === decoded.id);
+                store.dispatch({type: LOG_IN, ...decoded, user});
             })
             .catch(err => {
                 console.log(err);

@@ -45,6 +45,7 @@ class FeedPage extends Component {
     onPostSubmit(e){
         e.preventDefault();
         this.props.createPost(this.state.postText);
+        this.setState({...this.state, postText: ''});
     }
 
     onCommentSubmit(e, text, postId){
@@ -63,6 +64,8 @@ class FeedPage extends Component {
     render() {
         const {user, postReducer, userReducer, carReducer} = this.props;
         const {postText} = this.state;
+
+        if(!user) return <div>Loading...</div>;
 
 
         const carElements = carReducer.randomCarIds.map(id => {
@@ -88,7 +91,7 @@ class FeedPage extends Component {
                     postText={p.text}
                     postLikes={p.likers}
                     postComments={p.comments}
-                    userId={user.userId}
+                    userId={user._id}
                     onLike={this.onLike}
                     onCommentSubmit={this.onCommentSubmit}
                     onCommentDelete={this.onCommentDelete}
@@ -113,7 +116,7 @@ class FeedPage extends Component {
                         <p>See what your friends are talking about</p>
                     </div>
                     <form className='FeedPage-post-form FeedPage-blob' onSubmit={this.onPostSubmit}>
-                        <img src={userReducer.users[user.userId].imageUrl} alt={userReducer.users[user.userId].firstName + ' ' + userReducer.users[user.userId].lastName} />
+                        <img src={user.imageUrl} alt={user.firstName + ' ' + user.lastName} />
                         <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
                         <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                     </form>
@@ -134,7 +137,7 @@ class FeedPage extends Component {
 
 function mapStateToProps(state){
     return {
-        user: state.authReducer,
+        user: state.authReducer.user,
         postReducer: state.postReducer,
         userReducer: state.userReducer,
         carReducer: state.carReducer
