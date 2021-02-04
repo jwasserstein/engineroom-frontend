@@ -95,6 +95,7 @@ class WallPage extends Component {
                         userId={user._id}
                         userImageUrl={user.imageUrl}
                         alreadyFriend={authReducer.user.friends.includes(match.params.userId)}
+                        loggedInUserId={authReducer.user._id}
                     />
                 </div>
 

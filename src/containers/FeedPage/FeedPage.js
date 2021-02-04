@@ -27,13 +27,13 @@ class FeedPage extends Component {
     componentDidMount(){
         document.title = 'EngineRoom | Feed';
         
-        if(this.props.postReducer.lastUpdated === 0) {
+        if(this.props.postReducer.feedPostIds.length === 0) {
             this.props.getPosts();
         }
-        if(this.props.userReducer.lastUpdated === 0){
+        if(this.props.userReducer.randomUserIds.length === 0){
             this.props.getUsers(6);
         }
-        if(this.props.carReducer.lastUpdated === 0){
+        if(this.props.carReducer.randomCarIds.length === 0){
             this.props.getRandomCars(4);
         }
     }

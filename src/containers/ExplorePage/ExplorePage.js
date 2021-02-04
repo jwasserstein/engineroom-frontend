@@ -10,10 +10,10 @@ import './ExplorePage.css';
 class ExplorePage extends Component {
     componentDidMount(){
         document.title = 'EngineRoom | Explore';
-        if(this.props.userReducer.lastUpdated === 0){
+        if(this.props.userReducer.randomUserIds.length === 0){
             this.props.getUsers(6);
         }
-        if(this.props.carReducer.lastUpdated === 0){
+        if(this.props.carReducer.randomCarIds.length === 0){
             this.props.getRandomCars(4);
         }
     }
@@ -21,7 +21,7 @@ class ExplorePage extends Component {
     render() {
         const {carReducer, userReducer} = this.props;
 
-        if(!carReducer.lastUpdated || !userReducer.lastUpdated) return <div>Loading...</div>;
+        if(!userReducer.randomUserIds.length || !carReducer.randomCarIds.length) return <div>Loading...</div>;
         
         const carElements = carReducer.randomCarIds.map(id => {
             const c = carReducer.cars[id];
