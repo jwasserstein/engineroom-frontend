@@ -1,11 +1,11 @@
-import {GET_USERS, GET_RANDOM_USERS, GET_CARS, GET_POSTS} from '../actionTypes';
+import {GET_USERS, GET_RANDOM_USERS, GET_CARS, GET_POSTS, LOG_IN} from '../actionTypes';
 import {apiCall} from '../../services/api';
 
-export function getUsers(n){
+export function getRandomUsers(n){
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('get', `/users/random/${n}`, {});
+				const resp = await apiCall('get', `/users/random/${n}`);
 				if(resp.error){
 					return reject(resp.error);
 				}
@@ -29,7 +29,7 @@ export function getUser(userId){
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('get', `/users/${userId}`, {});
+				const resp = await apiCall('get', `/users/${userId}`);
 				if(resp.error){
 					return reject(resp.error);
 				}
@@ -50,6 +50,24 @@ export function getUser(userId){
 				dispatch({type: GET_USERS, users: userObj});
 				dispatch({type: GET_CARS, cars: carObj});
 				dispatch({type: GET_POSTS, posts: postObj});
+				return resolve();
+			} catch(err) {
+				return reject(err.message);
+			}
+		});
+	}
+}
+
+export function toggleFriend(friendId){
+	return dispatch => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const resp = await apiCall('post', `/users/${friendId}/friend`);
+				if(resp.error){
+					return reject(resp.error);
+				}
+
+				dispatch({type: LOG_IN, id: resp.id, username: resp.username, user: resp.user});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

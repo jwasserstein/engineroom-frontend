@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getUser} from '../../store/actions/users';
+import {getUser, toggleFriend} from '../../store/actions/users';
 import {getPosts} from '../../store/actions/posts';
 import {getCars} from '../../store/actions/cars';
 import {togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
@@ -16,6 +16,7 @@ class WallPage extends Component {
         this.onLike = this.onLike.bind(this);
         this.onCommentSubmit = this.onCommentSubmit.bind(this);
         this.onCommentDelete = this.onCommentDelete.bind(this);
+        this.onFriend = this.onFriend.bind(this);
     }
 
     componentDidMount(){
@@ -49,6 +50,10 @@ class WallPage extends Component {
 
     onCommentDelete(commentId, postId){
         this.props.deleteComment(commentId, postId);
+    }
+
+    onFriend(friendId){
+        this.props.toggleFriend(friendId);
     }
 
     render() {
@@ -94,6 +99,7 @@ class WallPage extends Component {
                         bio={user.bio}
                         userId={user._id}
                         userImageUrl={user.imageUrl}
+                        onFriend={this.onFriend}
                         alreadyFriend={authReducer.user.friends.includes(match.params.userId)}
                         loggedInUserId={authReducer.user._id}
                     />
@@ -140,4 +146,5 @@ WallPage.propTypes = {
     getCars: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getUser, togglePostLike, createComment, deleteComment, getPosts, getCars})(WallPage);
+export default connect(mapStateToProps, {getUser, togglePostLike, createComment, 
+                                        deleteComment, getPosts, getCars, toggleFriend})(WallPage);

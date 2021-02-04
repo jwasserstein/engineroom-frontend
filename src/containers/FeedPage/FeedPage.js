@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getPosts, createPost, togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
-import {getUsers} from '../../store/actions/users';
+import {getRandomUsers} from '../../store/actions/users';
 import {getRandomCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
 import User from '../../components/User';
@@ -31,7 +31,7 @@ class FeedPage extends Component {
             this.props.getPosts();
         }
         if(this.props.userReducer.randomUserIds.length === 0){
-            this.props.getUsers(6);
+            this.props.getRandomUsers(6);
         }
         if(this.props.carReducer.randomCarIds.length === 0){
             this.props.getRandomCars(4);
@@ -150,11 +150,11 @@ FeedPage.propTypes = {
     userReducer: PropTypes.object,
     carReducer: PropTypes.object,
     getPosts: PropTypes.func.isRequired,
-    getUsers: PropTypes.func.isRequired,
+    getRandomUsers: PropTypes.func.isRequired,
     getRandomCars: PropTypes.func.isRequired,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getUsers, getRandomCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getRandomUsers, getRandomCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);

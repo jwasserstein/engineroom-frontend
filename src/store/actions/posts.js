@@ -39,7 +39,7 @@ export function togglePostLike(postId) {
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('post', `/posts/${postId}/like`, {});
+				const resp = await apiCall('post', `/posts/${postId}/like`);
 				if(resp.error){
 					return reject(resp.error);
 				}

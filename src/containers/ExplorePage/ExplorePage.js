@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
-import {getUsers} from '../../store/actions/users';
+import {getRandomUsers} from '../../store/actions/users';
 import {getRandomCars} from '../../store/actions/cars';
 import User from '../../components/User';
 import Car from '../../components/Car';
@@ -11,7 +11,7 @@ class ExplorePage extends Component {
     componentDidMount(){
         document.title = 'EngineRoom | Explore';
         if(this.props.userReducer.randomUserIds.length === 0){
-            this.props.getUsers(6);
+            this.props.getRandomUsers(6);
         }
         if(this.props.carReducer.randomCarIds.length === 0){
             this.props.getRandomCars(4);
@@ -70,9 +70,9 @@ function mapStateToProps(state){
 
 ExplorePage.propTypes = {
     getRandomCars: PropTypes.func.isRequired,
-    getUsers: PropTypes.func.isRequired,
+    getRandomUsers: PropTypes.func.isRequired,
     userReducer: PropTypes.object,
     carReducer: PropTypes.object
 };
 
-export default connect(mapStateToProps, {getRandomCars, getUsers})(ExplorePage);
+export default connect(mapStateToProps, {getRandomCars, getRandomUsers})(ExplorePage);

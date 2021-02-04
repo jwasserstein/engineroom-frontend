@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import './UserAside.css';
 
-const UserAside = ({firstName, lastName, username, bio, userId, userImageUrl, alreadyFriend, loggedInUserId}) => (
+const UserAside = ({firstName, lastName, username, bio, userId, userImageUrl, alreadyFriend, loggedInUserId, onFriend}) => (
     <div>
         <div className='WallPage-user'>
             <img src={userImageUrl} alt={`${firstName} ${lastName}`} />
@@ -16,9 +16,9 @@ const UserAside = ({firstName, lastName, username, bio, userId, userImageUrl, al
         </div>
         {loggedInUserId !== userId && (
             alreadyFriend ? (
-                <button className='WallPage-friend-btn WallPage-remove-btn'>Remove Friend</button>
+                <button className='WallPage-friend-btn WallPage-remove-btn' onClick={() => onFriend(userId)}>Remove Friend</button>
             ) : (
-                <button className='WallPage-friend-btn'>Add Friend</button>
+                <button className='WallPage-friend-btn' onClick={() => onFriend(userId)}>Add Friend</button>
             )
         )}
     </div>
