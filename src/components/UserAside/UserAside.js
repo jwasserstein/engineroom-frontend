@@ -10,8 +10,8 @@ const UserAside = ({firstName, lastName, username, bio, userId, userImageUrl, al
             <p className='WallPage-username'>@{username}</p>
             <p className='WallPage-bio'>{bio}</p>
             <div>
-                <Link to={`/user/${userId}/friends`}>Friends</Link>
-                <Link to={`/user/${userId}/cars`}>Cars</Link>
+                <Link to={`/users/${userId}/friends`}>Friends</Link>
+                <Link to={`/users/${userId}/cars`}>Cars</Link>
             </div>
         </div>
         {loggedInUserId !== userId && (

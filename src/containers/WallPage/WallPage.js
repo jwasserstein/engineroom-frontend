@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {getUser, toggleFriend} from '../../store/actions/users';
+import {getUsers, toggleFriend} from '../../store/actions/users';
 import {getPosts} from '../../store/actions/posts';
 import {getCars} from '../../store/actions/cars';
 import {togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
@@ -20,11 +20,11 @@ class WallPage extends Component {
     }
 
     componentDidMount(){
-        const {userReducer, carReducer, postReducer, getUser, getPosts, getCars, match} = this.props;
+        const {authReducer, userReducer, carReducer, postReducer, getUsers, getPosts, getCars, match} = this.props;
 
         document.title = 'EngineRoom | Wall';
         if(!(match.params.userId in userReducer.users)) {
-            getUser(match.params.userId);
+            getUsers([match.params.userId], true, true);
         } else {
             const user = userReducer.users[match.params.userId];
             const missingPosts = user.posts.filter(p => !(p in postReducer.posts));
@@ -36,6 +36,9 @@ class WallPage extends Component {
             if(missingCars.length > 0){
                 getCars(missingCars);
             }
+        }
+        if(!(authReducer.userId in userReducer.users)) {
+            getUsers([authReducer.userId]);
         }
     }
 
@@ -60,7 +63,7 @@ class WallPage extends Component {
         const {userReducer, carReducer, postReducer, authReducer, match} = this.props;
         const user = userReducer.users?.[match.params.userId];
 
-        if(!user) return <div>Loading...</div>;
+        if(!user || !userReducer.users[authReducer.userId]) return <div>Loading...</div>;
 
         const carElements = user.cars.length > 0 && user.cars.map(id => {
             const c = carReducer.cars[id];
@@ -139,7 +142,7 @@ WallPage.propTypes = {
     carReducer: PropTypes.object,
     postReducer: PropTypes.object,
     authReducer: PropTypes.object,
-    getUser: PropTypes.func.isRequired,
+    getUsers: PropTypes.func.isRequired,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
     deleteComment: PropTypes.func.isRequired,
@@ -147,5 +150,5 @@ WallPage.propTypes = {
     getCars: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getUser, togglePostLike, createComment, 
+export default connect(mapStateToProps, {getUsers, togglePostLike, createComment, 
                                         deleteComment, getPosts, getCars, toggleFriend})(WallPage);

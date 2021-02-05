@@ -25,11 +25,14 @@ export function getRandomUsers(n){
 	}
 }
 
-export function getUser(userId){
+export function getUsers(userIds, cars, posts){
 	return dispatch => {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const resp = await apiCall('get', `/users/${userId}`);
+				let path = `/users?ids=${JSON.stringify(userIds)}`;
+				if(cars) path += '&cars=true';
+				if(posts) path += '&posts=true';
+				const resp = await apiCall('get', path);
 				if(resp.error){
 					return reject(resp.error);
 				}
@@ -38,18 +41,23 @@ export function getUser(userId){
 				for(let i = 0; i < resp.users.length; i++){
 					userObj[resp.users[i]._id] = resp.users[i];
 				}
-				const carObj = {};
-				for(let i = 0; i < resp.cars.length; i++){
-					carObj[resp.cars[i]._id] = resp.cars[i];
-				}
-				const postObj = {};
-				for(let i = 0; i < resp.posts.length; i++){
-					postObj[resp.posts[i]._id] = resp.posts[i];
-				}
-				
 				dispatch({type: GET_USERS, users: userObj});
-				dispatch({type: GET_CARS, cars: carObj});
-				dispatch({type: GET_POSTS, posts: postObj});
+
+				if('cars' in resp){
+					const carObj = {};
+					for(let i = 0; i < resp.cars.length; i++){
+						carObj[resp.cars[i]._id] = resp.cars[i];
+					}
+					dispatch({type: GET_CARS, cars: carObj});
+				}
+
+				if('posts' in resp){
+					const postObj = {};
+					for(let i = 0; i < resp.posts.length; i++){
+						postObj[resp.posts[i]._id] = resp.posts[i];
+					}
+					dispatch({type: GET_POSTS, posts: postObj});
+				}
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
