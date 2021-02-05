@@ -19,10 +19,9 @@ class WallPage extends Component {
         this.onFriend = this.onFriend.bind(this);
     }
 
-    componentDidMount(){
+    checkMissingData(){
         const {authReducer, userReducer, carReducer, postReducer, getUsers, getPosts, getCars, match} = this.props;
-
-        document.title = 'EngineRoom | Wall';
+        
         if(!(match.params.userId in userReducer.users)) {
             getUsers([match.params.userId], true, true);
         } else {
@@ -40,6 +39,15 @@ class WallPage extends Component {
         if(!(authReducer.userId in userReducer.users)) {
             getUsers([authReducer.userId]);
         }
+    }
+
+    componentDidMount(){
+        document.title = 'EngineRoom | Wall';
+        this.checkMissingData();
+    }
+
+    componentDidUpdate(){
+        this.checkMissingData();
     }
 
     onLike(postId){

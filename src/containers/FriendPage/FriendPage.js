@@ -13,24 +13,34 @@ class FriendPage extends Component {
         this.onFriend = this.onFriend.bind(this);
     }
 
-    componentDidMount() {
-        const {userReducer, match, getUsers} = this.props;
+    checkMissingData() {
+        const {authReducer, userReducer, match, getUsers} = this.props;
 
-        document.title = 'EngineRoom | Friends';
-
-        // Check for missing data: wall user or wall user's friends
+        // Check for missing data: loggedInUser, wall user or wall user's friends
+        if(!(authReducer.userId in userReducer.users)){
+            getUsers([authReducer.userId]);
+        }
         if(!(match.params.userId in userReducer.users)) {
             getUsers([match.params.userId])
                 .then(() => {
-                    const user = userReducer.users[match.params.userId];
-                    const missingUsers = user.friends.filter(f => !(f._id in userReducer.users));
-                    getUsers(missingUsers);
+                    const user = this.props.userReducer.users[match.params.userId];
+                    const missingUsers = user.friends.filter(f => !(f in userReducer.users));
+                    if(missingUsers.length !== 0) getUsers(missingUsers);
                 });
         } else {
-            const user = userReducer.users[match.params.userId];
-            const missingUsers = user.friends.filter(f => !(f._id in userReducer.users));
-            getUsers(missingUsers);
+            const user = this.props.userReducer.users[match.params.userId];
+            const missingUsers = user.friends.filter(f => !(f in userReducer.users));
+            if(missingUsers.length !== 0) getUsers(missingUsers);
         }
+    }
+
+    componentDidMount() {
+        document.title = 'EngineRoom | Friends';
+        this.checkMissingData();
+    }
+
+    componentDidUpdate() {
+        this.checkMissingData();
     }
 
     onFriend(friendId){
@@ -42,12 +52,11 @@ class FriendPage extends Component {
         const user = userReducer.users[match.params.userId];
         const loggedInUser = userReducer.users[authReducer.userId];
 
-        
-        if(!user) return <div>Loading...</div>;
-        const missingUsers = user.friends.filter(f => !(f._id in userReducer.users));
+        if(!user || !loggedInUser) return <div>Loading...</div>;
+        const missingUsers = user.friends.filter(f => !(f in userReducer.users));
         if(missingUsers.length !== 0) return <div>Loading...</div>;
 
-        const userElements = loggedInUser.friends.map(id => {
+        const userElements = user.friends.map(id => {
             const u = userReducer.users[id];
             return (
                 <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} width='150'/>
@@ -64,13 +73,13 @@ class FriendPage extends Component {
                     userId={user._id}
                     userImageUrl={user.imageUrl}
                     onFriend={this.onFriend}
-                    alreadyFriend={userReducer.users[authReducer.userId].friends.includes(match.params.userId)}
+                    alreadyFriend={loggedInUser.friends.includes(match.params.userId)}
                     loggedInUserId={authReducer.userId}
                 />
                 <div className='FriendPage-inner-container'>
                     <div className='FriendPage-title FriendPage-blob'>
-                        <h2>People</h2>
-                        <p>View a random selection of EngineRoom users</p>
+                        <h2>Friends</h2>
+                        <p>View {user.firstName}'s friends</p>
                     </div>
                     <div className='FriendPage-people-container'>
                         {userElements}
