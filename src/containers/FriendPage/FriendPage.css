@@ -1,16 +1,17 @@
 .FriendPage-container {
-    width: 90%;
+    width: 97%;
     margin: auto;
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
+    justify-content: space-around;
     align-items: flex-start;
     padding: 30px 0 20px 0;
 }
 
 .FriendPage-inner-container {
     width: 100%;
-    max-width: 700px;
+    flex-basis: 700px;
+    flex-shrink: 1;
 }
 
 .FriendPage-blob {
@@ -21,7 +22,7 @@
 
 .FriendPage-title {
     padding: 10px;
-    margin: 0 0 20px 20px;
+    margin: 0 0 20px 0;
 }
 
 .FriendPage-title h2 {
@@ -44,6 +45,11 @@
     flex-wrap: wrap;
 }
 
+.FriendPage-spacer {
+    flex-basis: 215px;
+    flex-shrink: 10;
+}
+
 @media (max-width: 900px){
     .FriendPage-container {
         flex-direction: column;
@@ -52,5 +58,10 @@
 
     .FriendPage-title {
         margin: 20px 0 20px 0;
+    }
+
+    .FriendPage-spacer {
+        flex-basis: 0;
+        height: 0;
     }
 }

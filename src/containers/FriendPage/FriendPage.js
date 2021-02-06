@@ -85,6 +85,7 @@ class FriendPage extends Component {
                         {userElements}
                     </div>
                 </div>
+                <div className='FriendPage-spacer'></div>
             </div>
         );
     }

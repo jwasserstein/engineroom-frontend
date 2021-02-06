@@ -60,4 +60,8 @@
     .WallPage-cars-container {
         display: none;
     }
+
+    .WallPage-user-container {
+        margin-bottom: 20px;
+    }
 }
