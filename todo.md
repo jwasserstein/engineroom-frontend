@@ -8,3 +8,11 @@
 - Add handling for token expiration
 - Add link to user's wall from their <UserAside>, so when you're on their car page you can get back to their wall
 - Add form field to <NewCarPage> for accelTime
+- Add way to add user profile image
+
+
+## Right Now
+
+
+## Potential Expansion Ideas
+- Add ability to delete and edit cars.  Add red X in top right corner to delete, pencil icon to edit.  Editing brings you back to the new car page with the fields pre-populated with the car's existing data.

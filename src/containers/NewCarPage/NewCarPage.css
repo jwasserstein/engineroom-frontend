@@ -44,7 +44,7 @@
 }
 
 .NewCarPage-form {
-    padding: 20px 20px 0 20px;
+    padding: 20px;
     margin-bottom: 20px;
     display: flex;
     flex-direction: column;
@@ -87,15 +87,25 @@
     color: rgba(0, 0, 0, 0.35);
 }
 
-.NewCarPage-form button {
-    width: 100%;
-    padding: 8px;
+.NewCarPage-browse-button {
+    padding: 8px 18px;
     border-radius: 17.5px;
     background-color: black;
     color: white;
     border: none;
     cursor: pointer;
     font-size: 16px;
+}
+
+.NewCarPage-submit-button {
+    padding: 8px 18px;
+    border-radius: 17.5px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
 }
 
 .NewCarPage-form button:hover {
@@ -106,25 +116,18 @@
     display: block;
     box-sizing: border-box;
     width: 100%;
-    margin: 3px 0 20px 0;
+    margin: 3px 0 10px 0;
     border-radius: 15px;
     border: 1px solid rgba(0, 0, 0, 0.35); 
     font-family: 'Roboto', sans-serif;
     padding: 5px 10px;
     font-size: 16px;
     resize: none;
-    height: 160px;
-}
-
-div.NewCarPage-form-col {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
+    height: 180px;
 }
 
 div.NewCarPage-image {
-    margin: 3px 0 20px 0;
+    margin: 3px 0 10px 0;
     background-color: rgba(0, 0, 0, 0.03);
     color: rgba(0, 0, 0, 0.3);
     border: 1px dashed rgba(0, 0, 0, 0.2);

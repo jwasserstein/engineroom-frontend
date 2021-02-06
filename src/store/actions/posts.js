@@ -73,9 +73,14 @@ export function createPost(text) {
 					postObj[resp.posts[i]._id] = resp.posts[i];
 					newPostIds.push(resp.posts[i]._id);
 				}
-
 				dispatch({type: GET_POSTS, posts: postObj});
 				dispatch({type: ADD_POST, newPostIds: newPostIds});
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				dispatch({type: GET_USERS, users: userObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);

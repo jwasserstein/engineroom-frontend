@@ -1,5 +1,5 @@
 import {apiCall} from '../../services/api';
-import {GET_CARS, GET_RANDOM_CARS} from '../actionTypes';
+import {GET_CARS, GET_RANDOM_CARS, GET_USERS} from '../actionTypes';
 
 export function getRandomCars(n) {
 	return dispatch => {
@@ -61,8 +61,13 @@ export function addCar(make, model, year, mods, accelTime, power, torque, imageU
 				for(let i = 0; i < resp.cars.length; i++){
 					carsObj[resp.cars[i]._id] = resp.cars[i];
 				}
-
 				dispatch({type: GET_CARS, cars: carsObj});
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				dispatch({type: GET_USERS, users: userObj});
 				return resolve();
 			} catch(err) {
 				return reject(err.message);
