@@ -12,3 +12,12 @@ body {
     background-color: #EAE8E5;
     font-size: 16px;
 }
+
+input:focus, 
+button:focus, 
+textarea:focus {
+    outline: none;
+    -webkit-appearance: none;
+    box-shadow: 0 0 0 2px rgb(14, 98, 201)!important;
+    border-color: transparent!important;
+}

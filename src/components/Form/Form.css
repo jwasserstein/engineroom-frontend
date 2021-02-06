@@ -7,13 +7,6 @@
     padding: 20px;
 }
 
-.Form-form *:focus {
-    outline: none;
-    -webkit-appearance: none;
-    box-shadow: 0 0 0 2px rgb(14, 98, 201)!important;
-    border-color: transparent!important;
-}
-
 .Form-field {
     padding: 5px 10px;
     border: 1px solid rgba(0, 0, 0, 0.35);

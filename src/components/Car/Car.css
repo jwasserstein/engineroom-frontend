@@ -9,6 +9,10 @@
     display: block;
 }
 
+.Car-car:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.30);
+}
+
 .Car-car img {
     width: 100%;
 }

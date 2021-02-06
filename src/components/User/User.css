@@ -12,6 +12,10 @@
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.12);
 }
 
+.User-person:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.30);
+}
+
 .User-person img {
     width: 100%;
     border-radius: 50%;
