@@ -10,6 +10,7 @@ dayjs.extend(relativeTime);
 const Post = ({postId, postUser, postDate, postText, postLikes, postComments, loggedInUserId, onLike, onCommentSubmit, onCommentDelete, users}) => {
     const commentElements = postComments.map(c => {
         const cUser = users[c.user];
+        if(!cUser) return <div key={c.user}>Loading...</div>;
         return (
             <div className='Post-comment' key={cUser.firstName + cUser.lastName + c.text}>
                 {cUser._id === loggedInUserId ? (

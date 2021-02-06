@@ -17,6 +17,7 @@ import FriendPage from '../FriendPage';
 import ProfilePage from '../ProfilePage';
 import PasswordPage from '../PasswordPage';
 import CarPage from '../CarPage';
+import NewCarPage from '../NewCarPage';
 import './App.css';
 
 class App extends Component {
@@ -44,6 +45,7 @@ class App extends Component {
                     <Switch>
                         <Route path='/password' component={withAuth(PasswordPage)} />
                         <Route path='/profile' component={withAuth(ProfilePage)} />
+                        <Route path='/users/:userId/cars/new' component={withAuth(NewCarPage)} />
                         <Route path='/users/:userId/cars' component={withAuth(CarPage)} />
                         <Route path='/users/:userId/friends' component={withAuth(FriendPage)} />
                         <Route path='/users/:userId' component={withAuth(WallPage)} />
