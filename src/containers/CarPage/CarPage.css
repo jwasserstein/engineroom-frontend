@@ -29,6 +29,7 @@
     width: 100%;
     flex-basis: 700px;
     flex-shrink: 1;
+    margin-left: 20px;
 }
 
 .CarPage-blob {
@@ -75,12 +76,18 @@
         align-items: center;
     }
 
-    .CarPage-title {
-        margin: 20px 0 20px 0;
-    }
-
     .CarPage-spacer {
         flex-basis: 0;
         height: 0;
+    }
+
+    .CarPage-inner-container {
+        margin: 20px 0 0 0;
+    }
+}
+
+@media (max-width: 600px){
+    .CarPage-inner-container {
+        max-width: 325px;
     }
 }

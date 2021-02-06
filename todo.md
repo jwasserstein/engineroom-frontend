@@ -7,7 +7,6 @@
 - Update layouts of <WallPage> and <FriendPage> to make them the same and not rely on width % and space-around
 - Add handling for token expiration
 - Add link to user's wall from their <UserAside>, so when you're on their car page you can get back to their wall
-- Add form field to <NewCarPage> for accelTime
 - Add way to add user profile image
 
 
