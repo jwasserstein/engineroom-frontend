@@ -22,14 +22,6 @@
     background-color: white;
 }
 
-.Options-item.Options-red {
-    background-color: #FFECEC;
-}
-
-.Options-item.Options-red:hover {
-    background-color: #FFDCDC;
-}
-
 .Options-item:last-of-type{
     border-bottom: none;
 }

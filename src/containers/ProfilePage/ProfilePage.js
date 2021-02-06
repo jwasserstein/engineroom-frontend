@@ -15,11 +15,11 @@ class ProfilePage extends Component {
                     <p>Select an option to edit your EngineRoom profile</p>
                 </div>
                 <Options.Container>
+                    <Options.Item to='/editProfile'>
+                        Edit Profile
+                    </Options.Item>
                     <Options.Item to='/password'>
                         Change Password
-                    </Options.Item>
-                    <Options.Item to='/password' red>
-                        Delete Account
                     </Options.Item>
                 </Options.Container>
             </div>

@@ -9,7 +9,7 @@ const Container = ({children}) => (
 );
 
 const Item = ({children, to, red}) => (
-    <Link className={red ? 'Options-item Options-red' : 'Options-item'} to={to} >
+    <Link className='Options-item' to={to}>
         {children}
     </Link>
 );
