@@ -6,3 +6,4 @@
 - Add car page
 - Add search functionality or some other way of finding other users that aren't suggested by <ExplorePage> or already on the feed
 - Update layouts of <WallPage> and <FriendPage> to make them the same and not rely on width % and space-around
+- Add handling for token expiration

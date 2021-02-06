@@ -14,6 +14,7 @@ import ExplorePage from '../ExplorePage';
 import FeedPage from '../FeedPage';
 import WallPage from '../WallPage';
 import FriendPage from '../FriendPage';
+import ProfilePage from '../ProfilePage';
 import './App.css';
 
 class App extends Component {
@@ -39,6 +40,7 @@ class App extends Component {
                 <Router>
                     <Navbar username={username} userId={userId} logOut={logOut} />
                     <Switch>
+                        <Route path='/profile' component={withAuth(ProfilePage)} />
                         <Route path='/users/:userId/friends' component={withAuth(FriendPage)} />
                         <Route path='/users/:userId' component={withAuth(WallPage)} />
                         <Route path='/feed' component={withAuth(FeedPage)} />
