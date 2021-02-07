@@ -66,4 +66,8 @@
     .ExplorePage-inner-container:first-of-type{
         margin: 0;
     }
+
+    .ExplorePage-inner-container:last-of-type .ExplorePage-title {
+        margin-top: 15px;
+    }
 }

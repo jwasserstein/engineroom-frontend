@@ -29,6 +29,7 @@
 .WallPage-title {
     padding: 10px;
     flex-grow: 1;
+    margin-bottom: 15px;
 }
 
 .WallPage-title h2 {
