@@ -17,11 +17,13 @@ class NewCarPage extends Component {
             modifications: '',
             accelTime: '',
             power: '',
-            torque: ''
+            torque: '',
+            image: null
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onFileChange = this.onFileChange.bind(this);
     }
 
     checkMissingData() {
@@ -47,10 +49,11 @@ class NewCarPage extends Component {
     }
 
     onSubmit(){
-        const {make, model, year, modifications, accelTime, power, torque} = this.state;
+        const {make, model, year, modifications, accelTime, power, torque, image} = this.state;
         const {addCar, history, match} = this.props;
-        
-        addCar(make, model, year, modifications, accelTime, power, torque, 'http://localhost:3001/images/default-car.png')
+
+        fetch('TBD', {method: 'POST', body: image})
+            .then(imageUrl => addCar(make, model, year, modifications, accelTime, power, torque, imageUrl))
             .then(() => history.push(`/users/${match.params.userId}/cars`));
         this.setState({...this.state, 
             make: '',
@@ -59,8 +62,13 @@ class NewCarPage extends Component {
             modifications: '',
             accelTime: '',
             power: '',
-            torque: ''
+            torque: '',
+            image: null
         });
+    }
+
+    onFileChange(e){
+        this.setState({...this.state, image: e.target.files[0]});
     }
 
     render() {
@@ -122,10 +130,9 @@ class NewCarPage extends Component {
                         <div className='NewCarPage-form-row'>
                             <div>
                                 <label htmlFor='image'>Image:</label>
-                                <div className='NewCarPage-image'>
-                                    Drag an image to upload...
-                                </div>
-                                <button className='NewCarPage-browse-button'>Browse</button>
+                                {this.state.image && <img src={URL.createObjectURL(this.state.image)} />}
+                                <label htmlFor='image'>Browse...</label>
+                                <input type='file' id='image' name='image' accept='image/*' onChange={this.onFileChange}/>
                             </div>
                             <div>
                                 <label htmlFor='modifications'>Modifications:</label>
