@@ -5,6 +5,7 @@ import UserAside from '../../components/UserAside';
 import {getUsers} from '../../store/actions/users';
 import {addCar} from '../../store/actions/cars';
 import './NewCarPage.css';
+import AWS from 'aws-sdk';
 
 class NewCarPage extends Component {
     constructor(props){
@@ -18,7 +19,9 @@ class NewCarPage extends Component {
             accelTime: '',
             power: '',
             torque: '',
-            image: null
+            image: null,
+            loading: false,
+            error: ''
         };
 
         this.onChange = this.onChange.bind(this);
@@ -50,21 +53,49 @@ class NewCarPage extends Component {
 
     onSubmit(){
         const {make, model, year, modifications, accelTime, power, torque, image} = this.state;
-        const {addCar, history, match} = this.props;
+        const {addCar, history, match, authReducer} = this.props;
 
-        fetch('TBD', {method: 'POST', body: image})
-            .then(imageUrl => addCar(make, model, year, modifications, accelTime, power, torque, imageUrl))
-            .then(() => history.push(`/users/${match.params.userId}/cars`));
-        this.setState({...this.state, 
-            make: '',
-            model: '',
-            year: '',
-            modifications: '',
-            accelTime: '',
-            power: '',
-            torque: '',
-            image: null
+        this.setState({...this.state, loading: true});
+
+        if(!image) return this.setState({...this.state, error: 'Please select an image first'});
+        const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
+        if(!fileExt) return this.setState({...this.state, error: "Couldn't determine the file extension"});
+        const objectName = `${encodeURIComponent(authReducer.username)}/car-${String(Date.now())}${fileExt}`;
+
+        const bucketName = 'engineroom';
+        const bucketRegion = 'us-east-1';
+        const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
+
+        AWS.config.update({
+            region: bucketRegion,
+            credentials: new AWS.CognitoIdentityCredentials({
+                IdentityPoolId: identityPoolId
+            })
         });
+
+        (new AWS.S3.ManagedUpload({
+            params: {
+                Bucket: bucketName,
+                Key: objectName,
+                Body: image
+            }
+        })).promise()
+            .then(resp => addCar(make, model, year, modifications, accelTime, power, torque, resp.Location))
+            .then(() => {
+                this.setState({...this.state, 
+                    make: '',
+                    model: '',
+                    year: '',
+                    modifications: '',
+                    accelTime: '',
+                    power: '',
+                    torque: '',
+                    image: null,
+                    loading: false,
+                    error: ''
+                }, () => history.push(`/users/${match.params.userId}/cars`));
+            })
+            .catch(err => console.log('Error uploading: ' + err.message));
     }
 
     onFileChange(e){
@@ -73,7 +104,7 @@ class NewCarPage extends Component {
 
     render() {
         const {userReducer, authReducer, match} = this.props;
-        const {make, model, year, modifications, accelTime, power, torque} = this.state;
+        const {make, model, year, modifications, accelTime, power, torque, loading} = this.state;
         const loggedInUser = userReducer.users[authReducer.userId];
 
         if(!loggedInUser) return <div>Loading...</div>;
@@ -130,14 +161,14 @@ class NewCarPage extends Component {
                         <div className='NewCarPage-form-row'>
                             <div>
                                 <label htmlFor='image'>Image:</label>
-                                {this.state.image && <img src={URL.createObjectURL(this.state.image)} />}
+                                {this.state.image && <img src={URL.createObjectURL(this.state.image)} alt='preview'/>}
                                 <label htmlFor='image'>Browse...</label>
                                 <input type='file' id='image' name='image' accept='image/*' onChange={this.onFileChange}/>
                             </div>
                             <div>
                                 <label htmlFor='modifications'>Modifications:</label>
                                 <textarea id='modifications' name='modifications' value={modifications} onChange={this.onChange} placeholder='K&N cold air intake, Bridgestone Ecopia tires'></textarea>
-                                <button className='NewCarPage-submit-button' onClick={this.onSubmit}>Submit</button>
+                                <button className='NewCarPage-submit-button' onClick={this.onSubmit}>{loading ? 'Loading...' : 'Submit'}</button>
                             </div>
                         </div>
                     </div>
