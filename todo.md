@@ -1,10 +1,9 @@
 # Todo
 - Standardize all margins between blobs to either 15px or 20px.
-- Add a way to edit your profile: image, bio, name, etc.
 - Add search functionality or some other way of finding other users that aren't suggested by <ExplorePage> or already on the feed
 - Add handling for token expiration
-- Add way to add user profile image
 - Add <Message> to all pages which perform API calls and therefore could have errors
+- Adjust padding and font size for <Car> to ensure the name (1) doesn't get too close to the edge, and (2) doesn't wrap
 
 
 ## Right Now

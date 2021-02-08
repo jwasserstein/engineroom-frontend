@@ -18,6 +18,7 @@ import ProfilePage from '../ProfilePage';
 import PasswordPage from '../PasswordPage';
 import CarPage from '../CarPage';
 import NewCarPage from '../NewCarPage';
+import EditProfilePage from '../EditProfilePage';
 import './App.css';
 
 class App extends Component {
@@ -43,6 +44,7 @@ class App extends Component {
                 <Router>
                     <Navbar username={username} userId={userId} logOut={logOut} />
                     <Switch>
+                        <Route path='/editProfile' component={withAuth(EditProfilePage)} />
                         <Route path='/password' component={withAuth(PasswordPage)} />
                         <Route path='/profile' component={withAuth(ProfilePage)} />
                         <Route path='/users/:userId/cars/new' component={withAuth(NewCarPage)} />

@@ -4,8 +4,8 @@ import {connect} from 'react-redux';
 import UserAside from '../../components/UserAside';
 import {getUsers} from '../../store/actions/users';
 import {addCar} from '../../store/actions/cars';
-import './NewCarPage.css';
 import AWS from 'aws-sdk';
+import './NewCarPage.css';
 
 class NewCarPage extends Component {
     constructor(props){
@@ -57,9 +57,9 @@ class NewCarPage extends Component {
 
         this.setState({...this.state, loading: true});
 
-        if(!image) return this.setState({...this.state, error: 'Please select an image first'});
+        if(!image) return this.setState({...this.state, loading: false, error: 'Please select an image first'});
         const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
-        if(!fileExt) return this.setState({...this.state, error: "Couldn't determine the file extension"});
+        if(!fileExt) return this.setState({...this.state, loading: false, error: "Couldn't determine the file extension"});
         const objectName = `${encodeURIComponent(authReducer.username)}/car-${String(Date.now())}${fileExt}`;
 
         const bucketName = 'engineroom';
@@ -104,7 +104,7 @@ class NewCarPage extends Component {
 
     render() {
         const {userReducer, authReducer, match} = this.props;
-        const {make, model, year, modifications, accelTime, power, torque, loading} = this.state;
+        const {make, model, year, modifications, accelTime, power, torque, loading, image} = this.state;
         const loggedInUser = userReducer.users[authReducer.userId];
 
         if(!loggedInUser) return <div>Loading...</div>;
@@ -161,7 +161,7 @@ class NewCarPage extends Component {
                         <div className='NewCarPage-form-row'>
                             <div>
                                 <label htmlFor='image'>Image:</label>
-                                {this.state.image && <img src={URL.createObjectURL(this.state.image)} alt='preview'/>}
+                                <img src={image ? URL.createObjectURL(image) : 'http://localhost:3001/images/default-car.png'} alt='preview'/>
                                 <label htmlFor='image'>Browse...</label>
                                 <input type='file' id='image' name='image' accept='image/*' onChange={this.onFileChange}/>
                             </div>
@@ -183,7 +183,7 @@ class NewCarPage extends Component {
 function mapStateToProps(state){
     return {
         userReducer: state.userReducer,
-        authReducer: state.authReducer,
+        authReducer: state.authReducer
     };
 }
 

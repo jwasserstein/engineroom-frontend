@@ -88,3 +88,26 @@ export function toggleFriend(friendId){
 		});
 	}
 }
+
+export function editProfile(firstName, lastName, bio, imageUrl){
+	return dispatch => {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const resp = await apiCall('put', '/users', {firstName, lastName, bio, imageUrl});
+				if(resp.error){
+					return reject(resp.error);
+				}
+
+				const userObj = {};
+				for(let i = 0; i < resp.users.length; i++){
+					userObj[resp.users[i]._id] = resp.users[i];
+				}
+				
+				dispatch({type: GET_USERS, users: userObj});
+				return resolve();
+			} catch(err) {
+				return reject(err.message);
+			}
+		});
+	}
+}

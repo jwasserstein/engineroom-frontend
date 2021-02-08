@@ -156,6 +156,7 @@
     height: 180px;
     width: 270px;
     object-fit: cover;
+    border-radius: 15px;
 }
 
 @media (max-width: 900px){
@@ -177,7 +178,7 @@
         height: 0;
     }
 
-    .NewCarPage-form-row:not(.NewCarPage-inner-row) {
+    .NewCarPage-form-row {
         flex-direction: column;
     }
 
@@ -191,10 +192,6 @@
 
     .NewCarPage-form-row>div {
         flex-basis: auto;
-    }
-
-    .NewCarPage-inner-row>div {
-        flex-basis: 0;
     }
 
     .NewCarPage-form label[for='image']:last-of-type {
