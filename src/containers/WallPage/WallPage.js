@@ -75,14 +75,14 @@ class WallPage extends Component {
 
         const carElements = user.cars.length > 0 && user.cars.map(id => {
             const c = carReducer.cars[id];
-            if(!c) return <div key={id + 'loading'}>Loading Car...</div>;
+            if(!c) return <div key={id}>Loading Car...</div>;
             return (
                 <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c._id} width='200'/>
             )
         });
         const postElements = user.posts.length > 0 && user.posts.map(id => {
             const p = postReducer.posts[id];
-            if(!p) return <div key={id + 'loading'}>Loading Post...</div>;
+            if(!p) return <div key={id}>Loading Post...</div>;
             return (
                 <Post 
                     postId={p._id}

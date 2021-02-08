@@ -10,9 +10,9 @@ dayjs.extend(relativeTime);
 const Post = ({postId, postUser, postDate, postText, postLikes, postComments, loggedInUserId, onLike, onCommentSubmit, onCommentDelete, users}) => {
     const commentElements = postComments.map(c => {
         const cUser = users[c.user];
-        if(!cUser) return <div key={c.user}>Loading...</div>;
+        if(!cUser) return <div key={c._id}>Loading...</div>;
         return (
-            <div className='Post-comment' key={cUser.firstName + cUser.lastName + c.text}>
+            <div className='Post-comment' key={c._id}>
                 {cUser._id === loggedInUserId ? (
                     <span onClick={() => onCommentDelete(c._id, postId)}>X</span>
                 ) : (

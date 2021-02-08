@@ -26,7 +26,7 @@ class ExplorePage extends Component {
         const carElements = carReducer.randomCarIds.map(id => {
             const c = carReducer.cars[id];
             return (
-                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} style={{marginLeft: '7.5px', marginRight: '7.5px'}}/>
+                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c._id} style={{marginLeft: '7.5px', marginRight: '7.5px'}}/>
             )
         });
         const userElements = userReducer.randomUserIds.map(id => {

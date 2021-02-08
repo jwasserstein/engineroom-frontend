@@ -72,7 +72,7 @@ class FeedPage extends Component {
         const carElements = carReducer.randomCarIds.map(id => {
             const c = carReducer.cars[id];
             return (
-                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c.name + c.user} width='200'/>
+                <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c._id} width='200'/>
             )
         });
         const userElements = userReducer.randomUserIds.map(id => {
@@ -97,7 +97,7 @@ class FeedPage extends Component {
                     onLike={this.onLike}
                     onCommentSubmit={this.onCommentSubmit}
                     onCommentDelete={this.onCommentDelete}
-                    key={p.user._id+p.text}
+                    key={p._id}
                 />
             )
         });
