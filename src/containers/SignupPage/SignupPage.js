@@ -18,6 +18,8 @@ class SignupPage extends Component {
 			loading: false,
 			error: ''
 		};
+
+		this.onClearError = this.onClearError.bind(this);
 	}
 
 	componentDidMount() {
@@ -46,6 +48,10 @@ class SignupPage extends Component {
 			});
 	}
 
+	onClearError() {
+		this.setState({...this.state, error: ''});
+	}
+
     render() {
         const {firstName, lastName, username, password, repeatPassword, error, loading} = this.state;
 
@@ -65,7 +71,7 @@ class SignupPage extends Component {
                 </div>
 
                 {error && (
-					<Message>
+					<Message color='red' onClearError={this.onClearError}>
 						{error}
 					</Message>
 				)}

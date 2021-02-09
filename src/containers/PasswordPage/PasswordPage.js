@@ -18,6 +18,7 @@ class PasswordPage extends Component{
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onClearError = this.onClearError.bind(this);
     }
 
     componentDidMount() {
@@ -60,6 +61,10 @@ class PasswordPage extends Component{
             });
     }
 
+    onClearError() {
+		this.setState({...this.state, message: ''});
+	}
+
     render() {
         const {currentPassword, newPassword, repeatNewPassword, 
             message, messageColor, loading} = this.state;
@@ -77,7 +82,7 @@ class PasswordPage extends Component{
                     <p>Change your EngineRoom password</p>
                 </div>
                 {message && (
-                    <Message color={messageColor} >
+                    <Message color={messageColor} onClearError={this.onClearError}>
                         {message}
                     </Message>
                 )}

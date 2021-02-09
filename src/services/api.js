@@ -1,17 +1,7 @@
 export async function apiCall(type, url, data) {
-	if(type.toLowerCase() === 'get'){
+	try {
 		const resp = await fetch(process.env.REACT_APP_BACKEND_URL + '/api' + url, {
-			method: type,
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': `Bearer ${localStorage.token}`
-			}
-		});
-		const d = await resp.json();
-		return d;
-	} else {
-		const resp = await fetch(process.env.REACT_APP_BACKEND_URL + '/api' + url, {
-			method: type,
+			method: type.toLowerCase(),
 			headers: {
 				'Content-Type': 'application/json',
 				'Authorization': `Bearer ${localStorage.token}`
@@ -20,5 +10,7 @@ export async function apiCall(type, url, data) {
 		});
 		const d = await resp.json();
 		return d;
+	} catch(err) {
+		return {error: err.message};
 	}
 }

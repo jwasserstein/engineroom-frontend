@@ -2,10 +2,14 @@
 - Standardize all margins between blobs to either 15px or 20px.
 - Add handling for token expiration
 - Add <Message> to all pages which perform API calls and therefore could have errors
+- Fix infinite loop if backend doesn't respond
 
 
 ## Right Now
-
+- Message
+- Token expiration
+- Deployment
+- Add to portfolio
 
 ## Potential Expansion Ideas
 - Add ability to delete and edit cars.  Add red X in top right corner to delete, pencil icon to edit.  Editing brings you back to the new car page with the fields pre-populated with the car's existing data.
