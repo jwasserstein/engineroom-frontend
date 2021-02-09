@@ -18,9 +18,9 @@ const Post = ({postId, postUser, postDate, postText, postLikes, postComments, lo
                 ) : (
                     <span></span>
                 )}
-                <img src={cUser.imageUrl} alt={cUser.firstName + ' ' + cUser.lastName} />
+                <Link to={`/users/${cUser._id}`}><img src={cUser.imageUrl} alt={cUser.firstName + ' ' + cUser.lastName} /></Link>
                 <div>
-                    <span>{cUser.firstName} {cUser.lastName} - {dayjs(c.date).fromNow()}</span>
+                    <Link to={`/users/${cUser._id}`}>{cUser.firstName} {cUser.lastName} - {dayjs(c.date).fromNow()}</Link>
                     <p>{c.text}</p>
                 </div>
             </div>
