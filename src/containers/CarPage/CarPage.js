@@ -26,13 +26,10 @@ class CarPage extends Component {
         const {authReducer, userReducer, carReducer, match, getUsers, getCars} = this.props;
 
         // Check for missing data: loggedInUser, wall user or wall user's cars
-        if(!(authReducer.userId in userReducer.users)){
-            this.setState({...this.state, fetching: this.state.fetching+1});
-            getUsers([authReducer.userId])
-                .then(() => this.setState({...this.state, fetching: this.state.fetching-1}))
-                .catch(err => this.setState({...this.state, error: err, fetching: this.state.fetching-1}));
-        }
-        if(!(match.params.userId in userReducer.users)) {
+        const missingUsers = [];
+        if(!(authReducer.userId in userReducer.users)) missingUsers.push(authReducer.userId);
+        if(!(match.params.userId in userReducer.users)) missingUsers.push(match.params.userId);
+        if(missingUsers.length !== 0) {
             this.setState({...this.state, fetching: this.state.fetching+1});
             getUsers([match.params.userId])
                 .then(() => {
@@ -65,7 +62,7 @@ class CarPage extends Component {
     }
 
     componentDidUpdate() {
-        if(this.state.fetching === 0) {
+        if(this.state.fetching === 0 && this.state.error === '') {
             this.checkMissingData();
         }
     }
@@ -81,14 +78,8 @@ class CarPage extends Component {
     render() {
         const {userReducer, authReducer, carReducer, match} = this.props;
         const {error} = this.state;
-        const user = userReducer.users[match.params.userId];
-        const loggedInUser = userReducer.users[authReducer.userId];
-
-        if(error) return <Message color='red' onClearError={this.onClearError}>{error}</Message>;
-
-        if(!user || !loggedInUser) return <div>Loading...</div>;
-        const missingCars = user.cars.filter(f => !(f in carReducer.cars));
-        if(missingCars.length !== 0) return <div>Loading...</div>;
+        const user = userReducer.users[match.params.userId] || {cars: [], post: [], friends: []};
+        const loggedInUser = userReducer.users[authReducer.userId] || {cars: [], posts: [], friends: []};
 
         // Create car elements here
         const carElements = user.cars.map(id => {
@@ -119,6 +110,7 @@ class CarPage extends Component {
                     loggedInUserId={authReducer.userId}
                 />
                 <div className='CarPage-inner-container'>
+                    {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                     <div className='CarPage-title-container'>
                         <div className='CarPage-title CarPage-blob'>
                             <h2>Cars</h2>
