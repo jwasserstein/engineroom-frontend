@@ -4,6 +4,8 @@
 - Add <Message> to all pages which perform API calls and therefore could have errors
 - Fix infinite loop if backend doesn't respond
 - Replace if(!data) return <div>Loading...</div>; with loggedInUser = userReducer.users[authReducer.userId] || {};  Empty object will prevent errors
+- Verify responsiveness of all pages, including the middle-ground between desktop and mobile
+- Ensure you can edit a profile with the default image
 
 
 ## Right Now

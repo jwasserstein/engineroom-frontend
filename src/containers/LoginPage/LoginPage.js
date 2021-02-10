@@ -29,15 +29,11 @@ class LoginPage extends Component {
 	
 	onSubmit = e => {
 		e.preventDefault();
-		this.setState({...this.state, loading: true})
+		this.setState({...this.state, fetching: this.state.fetching+1});
 		this.props.logIn(e.target.username.value, e.target.password.value)
-			.then(() => {
-				this.setState({...this.state, fetching: this.state.fetching+1, error: ''});
-				this.props.history.push('/feed');
-			})
-			.catch(err => {
-				this.setState({...this.state, fetching: this.state.fetching-1, error: err});
-			});
+			.catch(err => this.setState({...this.state, error: err}))
+			.finally(() => this.setState({...this.state, fetching: this.state.fetching-1}))
+			.then(() => this.props.history.push('/feed'));
 	}
 	
 	onClearError() {
