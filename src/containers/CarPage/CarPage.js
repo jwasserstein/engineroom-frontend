@@ -83,8 +83,7 @@ class CarPage extends Component {
 
         // Create car elements here
         const carElements = user.cars.map(id => {
-            const c = carReducer.cars[id];
-            if(!c) return <div key={id}>Loading Car...</div>;
+            const c = carReducer.cars[id] || {_id: id, name: '', imageUrl: '', mods: '', accelTime: '', power: '', torque: ''};
             return (<DetailedCar 
                 name={c.name}
                 imageUrl={c.imageUrl}
