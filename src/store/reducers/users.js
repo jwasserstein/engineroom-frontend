@@ -2,7 +2,7 @@ import {GET_USERS, REMOVE_USERS, GET_RANDOM_USERS} from '../actionTypes';
 
 const DEFAULT_STATE = {
 	users: {},
-	randomUserIds: []
+	randomUserIds: {ids: [], lastUpdated: 0}
 }
 
 export function userReducer(state=DEFAULT_STATE, action){
@@ -12,7 +12,7 @@ export function userReducer(state=DEFAULT_STATE, action){
 		case REMOVE_USERS:
 			return DEFAULT_STATE;
 		case GET_RANDOM_USERS:
-			return {...state, randomUserIds: action.randomUserIds};
+			return {...state, randomUserIds: {ids: action.randomUserIds, lastUpdated: Date.now()}};
 		default: 
 			return state;
 	}

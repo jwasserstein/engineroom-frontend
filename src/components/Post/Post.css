@@ -107,6 +107,7 @@
 
 .Post-comment>div>p {
     margin: 0;
+    font-size: 14px;
 }
 
 .Post-comment-input {

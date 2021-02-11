@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getPosts, createPost, togglePostLike, createComment, deleteComment} from '../../store/actions/posts';
-import {getRandomUsers} from '../../store/actions/users';
+import {getRandomUsers, getUsers} from '../../store/actions/users';
 import {getRandomCars} from '../../store/actions/cars';
 import Car from '../../components/Car';
 import User from '../../components/User';
@@ -30,22 +30,31 @@ class FeedPage extends Component {
     }
 
     checkMissingData(){
+        const {authReducer, userReducer, postReducer, carReducer, 
+            getUsers, getPosts, getRandomUsers, getRandomCars} = this.props;
         let {fetching} = this.state;
-        if(this.props.postReducer.feedPostIds.length === 0) {
+
+        if(!(authReducer.userId in userReducer.users)){
             fetching++;
-            this.props.getPosts()
+            getUsers([authReducer.userId])
                 .catch(err => this.setState({...this.state, error: err}))
                 .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
-        if(this.props.userReducer.randomUserIds.length === 0){
+        if(postReducer.feedPostIds.lastUpdated === 0) {
             fetching++;
-            this.props.getRandomUsers(6)
+            getPosts()
                 .catch(err => this.setState({...this.state, error: err}))
                 .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
-        if(this.props.carReducer.randomCarIds.length === 0){
+        if(userReducer.randomUserIds.lastUpdated === 0){
             fetching++;
-            this.props.getRandomCars(4)
+            getRandomUsers(6)
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
+        }
+        if(carReducer.randomCarIds.lastUpdated === 0){
+            fetching++;
+            getRandomCars(4)
                 .catch(err => this.setState({...this.state, error: err}))
                 .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
@@ -107,8 +116,9 @@ class FeedPage extends Component {
         const {authReducer, postReducer, userReducer, carReducer} = this.props;
         const {postText, error} = this.state;
         const user = userReducer.users[authReducer.userId] || {};
-        const randomCarIds = carReducer.randomCarIds || [];
-        const randomUserIds = userReducer.randomUserIds || [];
+        const randomCarIds = carReducer.randomCarIds.ids || [];
+        const randomUserIds = userReducer.randomUserIds.ids || [];
+        const feedPostIds = postReducer.feedPostIds.ids || [];
 
         const carElements = randomCarIds.map(id => {
             const c = carReducer.cars[id] || {_id: id, name: '', imageUrl: '', userId: ''};
@@ -123,7 +133,7 @@ class FeedPage extends Component {
             )
         });
 
-        const postElements = postReducer.feedPostIds.map(id => {
+        const postElements = feedPostIds.map(id => {
             const p = postReducer.posts[id] || {_id: id, user: '', date: '', text: '', likers: [], comments: []};
             return (
                 <Post 
@@ -197,7 +207,9 @@ FeedPage.propTypes = {
     getRandomCars: PropTypes.func.isRequired,
     togglePostLike: PropTypes.func.isRequired,
     createComment: PropTypes.func.isRequired,
-    deleteComment: PropTypes.func.isRequired
+    deleteComment: PropTypes.func.isRequired,
+    getUsers: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getPosts, getRandomUsers, getRandomCars, togglePostLike, createPost, createComment, deleteComment})(FeedPage);
+export default connect(mapStateToProps, {getPosts, getRandomUsers, getRandomCars, togglePostLike, 
+                                        createPost, createComment, deleteComment, getUsers})(FeedPage);

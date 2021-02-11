@@ -3,6 +3,9 @@
 - Verify responsiveness of all pages, including the middle-ground between desktop and mobile
 - Ensure you can edit a profile with the default image
 - Create dummy accounts that new users are friends with by default as a demo
+- Add "You don't have any posts" if there are no posts, cars, etc.
+- Refresh on every single page to check for missing data
+- When user updates their profile picture, delete old one?
 
 
 ## Right Now

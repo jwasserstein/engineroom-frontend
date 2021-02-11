@@ -31,7 +31,7 @@ class CarPage extends Component {
         if(!(match.params.userId in userReducer.users)) missingUsers.push(match.params.userId);
         if(missingUsers.length !== 0) {
             this.setState({...this.state, fetching: this.state.fetching+1});
-            getUsers([match.params.userId])
+            getUsers(missingUsers)
                 .then(() => {
                     this.setState({...this.state, fetching: this.state.fetching-1});
                     const user = this.props.userReducer.users[match.params.userId];

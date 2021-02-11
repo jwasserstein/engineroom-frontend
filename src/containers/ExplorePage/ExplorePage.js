@@ -23,13 +23,13 @@ class ExplorePage extends Component {
 
     checkMissingData() {
         let {fetching} = this.state;
-        if(this.props.userReducer.randomUserIds.length === 0){
+        if(this.props.userReducer.randomUserIds.lastUpdated === 0){
             fetching++;
             this.props.getRandomUsers(6)
                 .catch(err => this.setState({...this.state, error: err}))
                 .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
-        if(this.props.carReducer.randomCarIds.length === 0){
+        if(this.props.carReducer.randomCarIds.lastUpdated === 0){
             fetching++;
             this.props.getRandomCars(4)
                 .catch(err => this.setState({...this.state, error: err}))
@@ -58,8 +58,8 @@ class ExplorePage extends Component {
     render() {
         const {carReducer, userReducer} = this.props;
         const {error} = this.state;
-        const randomCarIds = carReducer.randomCarIds || [];
-        const randomUserIds = userReducer.randomUserIds || [];
+        const randomCarIds = carReducer.randomCarIds.ids || [];
+        const randomUserIds = userReducer.randomUserIds.ids || [];
         
         const carElements = randomCarIds.map(id => {
             const c = carReducer.cars[id] || {_id: id, name: '', imageUrl: '', userId: ''};
