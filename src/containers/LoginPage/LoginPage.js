@@ -31,9 +31,8 @@ class LoginPage extends Component {
 		e.preventDefault();
 		this.setState({...this.state, fetching: this.state.fetching+1});
 		this.props.logIn(e.target.username.value, e.target.password.value)
-			.catch(err => this.setState({...this.state, error: err}))
-			.finally(() => this.setState({...this.state, fetching: this.state.fetching-1}))
-			.then(() => this.props.history.push('/feed'));
+			.then(() => this.props.history.push('/feed'))
+			.catch(err => this.setState({...this.state, fetching: this.state.fetching-1, error: err, username: '', password: ''}));
 	}
 	
 	onClearError() {

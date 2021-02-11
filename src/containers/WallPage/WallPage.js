@@ -8,36 +8,61 @@ import {togglePostLike, createComment, deleteComment} from '../../store/actions/
 import Car from '../../components/Car';
 import Post from '../../components/Post';
 import UserAside from '../../components/UserAside';
+import Message from '../../components/Message';
 import './WallPage.css';
 
 class WallPage extends Component {
     constructor(props){
         super(props);
+
+        this.state = {
+            error: '',
+            fetching: 0
+        };
+
         this.onLike = this.onLike.bind(this);
         this.onCommentSubmit = this.onCommentSubmit.bind(this);
         this.onCommentDelete = this.onCommentDelete.bind(this);
         this.onFriend = this.onFriend.bind(this);
+        this.onClearError = this.onClearError.bind(this);
     }
 
     checkMissingData(){
         const {authReducer, userReducer, carReducer, postReducer, getUsers, getPosts, getCars, match} = this.props;
         
+        // Check for missing data: loggedInUser, wall user, wall user's posts, or wall user's cars
+        let {fetching} = this.state;
         if(!(match.params.userId in userReducer.users)) {
-            getUsers([match.params.userId], true, true);
+            fetching++;
+            getUsers([match.params.userId], true, true)
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         } else {
             const user = userReducer.users[match.params.userId];
             const missingPosts = user.posts.filter(p => !(p in postReducer.posts));
             if(missingPosts.length > 0){
-                getPosts(missingPosts);
+                fetching++;
+                getPosts(missingPosts)
+                    .catch(err => this.setState({...this.state, error: err}))
+                    .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
             }
 
             const missingCars = user.cars.filter(c => !(c in carReducer.cars));
             if(missingCars.length > 0){
-                getCars(missingCars);
+                fetching++;
+                getCars(missingCars)
+                    .catch(err => this.setState({...this.state, error: err}))
+                    .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
             }
         }
         if(!(authReducer.userId in userReducer.users)) {
-            getUsers([authReducer.userId]);
+            fetching++;
+            getUsers([authReducer.userId])
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
+        }
+        if(fetching !== this.state.fetching){
+            this.setState({...this.state, fetching: fetching});
         }
     }
 
@@ -47,46 +72,63 @@ class WallPage extends Component {
     }
 
     componentDidUpdate(){
-        this.checkMissingData();
+        if(this.state.fetching === 0 && this.state.error === ''){
+            this.checkMissingData();
+        }
     }
 
     onLike(postId){
-        this.props.togglePostLike(postId);
+        this.setState({...this.state, fetching: this.state.fetching+1});
+        this.props.togglePostLike(postId)
+            .catch(err => this.setState({...this.state, error: err}))
+            .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
     }
 
     onCommentSubmit(e, text, postId){
         e.preventDefault();
+        this.setState({...this.state, fetching: this.state.fetching+1});
         this.props.createComment(text, postId)
+            .catch(err => this.setState({...this.state, error: err}))
+            .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
     }
 
     onCommentDelete(commentId, postId){
-        this.props.deleteComment(commentId, postId);
+        this.setState({...this.state, fetching: this.state.fetching+1});
+        this.props.deleteComment(commentId, postId)
+            .catch(err => this.setState({...this.state, error: err}))
+            .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
     }
 
     onFriend(friendId){
-        this.props.toggleFriend(friendId);
+        this.setState({...this.state, fetching: this.state.fetching+1});
+        this.props.toggleFriend(friendId)
+            .catch(err => this.setState({...this.state, error: err}))
+            .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
     }
+
+    onClearError() {
+		this.setState({...this.state, error: ''});
+	}
 
     render() {
         const {userReducer, carReducer, postReducer, authReducer, match} = this.props;
-        const user = userReducer.users?.[match.params.userId];
+        const {error} = this.state;
+        const user = userReducer.users[match.params.userId] || {_id: '', cars: [], posts: [], friends: [], firstName: '', lastName: '', imageUrl: ''};
+        const loggedInUser = userReducer.users[authReducer.userId] || {_id: '', cars: [], posts: [], friends: [], firstName: '', lastName: '', imageUrl: ''};
 
-        if(!user || !userReducer.users[authReducer.userId]) return <div>Loading...</div>;
-
-        const carElements = user.cars.length > 0 && user.cars.map(id => {
-            const c = carReducer.cars[id];
-            if(!c) return <div key={id}>Loading Car...</div>;
+        const carElements = user.cars.map(id => {
+            const c = carReducer.cars[id] || {_id: id, name: '', imageUrl: '', user: ''};
             return (
                 <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c._id} width='200'/>
             )
         });
-        const postElements = user.posts.length > 0 && user.posts.map(id => {
-            const p = postReducer.posts[id];
-            if(!p) return <div key={id}>Loading Post...</div>;
+        const postElements = user.posts.map(id => {
+            const p = postReducer.posts[id] || {_id: id, date: '', text: '', user: '', likers: [], comments: []};
+            const pUser = userReducer.users[p.user] || {_id: '', cars: [], posts: [],  firstName: '', lastName: '', imageUrl: ''};
             return (
                 <Post 
                     postId={p._id}
-                    postUser={userReducer.users[p.user]}
+                    postUser={pUser}
                     postDate={p.date}
                     postText={p.text}
                     postLikes={p.likers}
@@ -103,6 +145,7 @@ class WallPage extends Component {
 
         return (
             <div className='WallPage-container'>
+                {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                 <div className='WallPage-user-container'>
                     <UserAside 
                         firstName={user.firstName}
@@ -112,7 +155,7 @@ class WallPage extends Component {
                         userId={user._id}
                         userImageUrl={user.imageUrl}
                         onFriend={this.onFriend}
-                        alreadyFriend={userReducer.users[authReducer.userId].friends.includes(match.params.userId)}
+                        alreadyFriend={loggedInUser.friends.includes(match.params.userId)}
                         loggedInUserId={authReducer.userId}
                     />
                 </div>

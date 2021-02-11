@@ -15,7 +15,7 @@ class SignupPage extends Component {
 			username: '',
 			password: '',
 			repeatPassword: '',
-			loading: false,
+			fetching: 0,
 			error: ''
 		};
 
@@ -34,18 +34,13 @@ class SignupPage extends Component {
 		e.preventDefault();
 		const {password, repeatPassword, username, firstName, lastName} = this.state;
 
-		this.setState({...this.state, loading: true});
 		if(password !== repeatPassword){
-			return this.setState({...this.state, loading: false, error: "Your passwords don't match"});
+			return this.setState({...this.state, error: "Your passwords don't match"});
 		}
+		this.setState({...this.state, fetching: this.state.fetching+1});
 		this.props.signUp(username, password, firstName, lastName)
-			.then(() => {
-				this.setState({...this.state, loading: false, error: ''});
-				this.props.history.push('/feed');
-			})
-			.catch(err => {
-				this.setState({...this.state, loading: false, error: err});
-			});
+			.then(() => this.props.history.push('/feed'))
+			.catch(err => this.setState({...this.state, fetching: this.state.fetching-1, error: err}));
 	}
 
 	onClearError() {
@@ -53,7 +48,7 @@ class SignupPage extends Component {
 	}
 
     render() {
-        const {firstName, lastName, username, password, repeatPassword, error, loading} = this.state;
+        const {firstName, lastName, username, password, repeatPassword, error, fetching} = this.state;
 
 		const fields = [
 			{label: 'First Name', name: 'firstName', type: 'text', value: firstName, placeholder: 'John'},
@@ -70,15 +65,11 @@ class SignupPage extends Component {
                     <p>Create an EngineRoom account</p>
                 </div>
 
-                {error && (
-					<Message color='red' onClearError={this.onClearError}>
-						{error}
-					</Message>
-				)}
+                {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
 				<Form onSubmit={this.onSubmit} 
 						onChange={this.onChange}
 						fields={fields}
-                        loading={loading}
+                        loading={fetching !== 0}
                         buttonText='Sign Up' />
             </div>
         );
