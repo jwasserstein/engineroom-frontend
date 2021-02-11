@@ -6,7 +6,7 @@ const UserAside = ({firstName, lastName, username, bio, userId, userImageUrl, al
     <div>
         <div className='UserAside-user'>
             <Link to={`/users/${userId}`} className='UserAside-user-link'>
-                <img src={userImageUrl} alt={`${firstName} ${lastName}`} />
+                <img src={userImageUrl} alt='User profile' />
                 <h2>{firstName} {lastName}</h2>
                 <p className='UserAside-username'>@{username}</p>
                 <p className='UserAside-bio'>{bio}</p>

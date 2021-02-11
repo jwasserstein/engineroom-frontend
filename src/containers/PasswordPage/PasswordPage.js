@@ -11,13 +11,14 @@ class PasswordPage extends Component{
             currentPassword: '',
             newPassword: '',
             repeatNewPassword: '',
-            loading: false,
+            fetching: 0,
             message: '',
             messageColor: ''
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onClearError = this.onClearError.bind(this);
     }
 
     componentDidMount() {
@@ -30,39 +31,33 @@ class PasswordPage extends Component{
 
     onSubmit(e){
         e.preventDefault();
-        if(this.state.newPassword !== this.state.repeatNewPassword){
-            return this.setState({...this.state,
-                        currentPassword: '',
-                        newPassword: '',
-                        repeatNewPassword: '',
-                        message: 'New passwords must match',
-                        messageColor: 'red'
-                    });
+
+        const {currentPassword, newPassword, repeatNewPassword} = this.state;
+
+        if(newPassword !== repeatNewPassword){
+            return this.setState({...this.state, currentPassword: '', newPassword: '', repeatNewPassword: '', 
+                                message: 'New passwords must match', messageColor: 'red'});
         }
 
-        this.setState({...this.state, loading: true});
-        apiCall('POST', `/auth/changePassword`, {
-            currentPassword: this.state.currentPassword,
-            newPassword: this.state.newPassword,
-            repeatNewPassword: this.state.repeatNewPassword
-        })
+        this.setState({...this.state, fetching: this.state.fetching+1});
+        apiCall('POST', `/auth/changePassword`, {currentPassword: currentPassword, newPassword: newPassword, repeatNewPassword: repeatNewPassword})
             .then(response => {
                     const message = 'error' in response ? response.error : response.message;
                     const color = 'error' in response ? 'red' : 'green';
-                    this.setState({
-                        currentPassword: '',
-                        newPassword: '',
-                        repeatNewPassword: '',
-                        loading: false,
-                        message: message,
-                        messageColor: color
-                    });
-            });
+                    this.setState({message: message, messageColor: color});
+            })
+            .catch(err => this.setState({message: err.message, messageColor: 'red'}))
+            .finally(() => this.setState({...this.state, currentPassword: '', newPassword: '', 
+                                        repeatNewPassword: '', fetching: this.state.fetching-1}));
     }
+
+    onClearError() {
+		this.setState({...this.state, message: ''});
+	}
 
     render() {
         const {currentPassword, newPassword, repeatNewPassword, 
-            message, messageColor, loading} = this.state;
+            message, messageColor, fetching} = this.state;
 
         const fields = [
             {label: 'Current Password', name: 'currentPassword', type: 'password', value: currentPassword, placeholder: '********'},
@@ -76,19 +71,14 @@ class PasswordPage extends Component{
                     <h2>Change Password</h2>
                     <p>Change your EngineRoom password</p>
                 </div>
-                {message && (
-                    <Message color={messageColor} >
-                        {message}
-                    </Message>
-                )}
+                {message && (<Message color={messageColor} onClearError={this.onClearError}>{message}</Message>)}
                 <Form 
                     onSubmit={this.onSubmit} 
                     onChange={this.onChange}
                     fields={fields}
-                    loading={loading}
+                    loading={fetching !== 0}
                     buttonText='Change Password'
                 />
-                
             </div>
         );
     }

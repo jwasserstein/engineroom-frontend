@@ -12,9 +12,11 @@ class LoginPage extends Component {
 		this.state = {
 			username: '',
 			password: '',
-			loading: false,
+			fetching: 0,
 			error: ''
 		};
+		
+		this.onClearError = this.onClearError.bind(this);
 	}
 
 	componentDidMount() {
@@ -27,19 +29,18 @@ class LoginPage extends Component {
 	
 	onSubmit = e => {
 		e.preventDefault();
-		this.setState({...this.state, loading: true})
+		this.setState({...this.state, fetching: this.state.fetching+1});
 		this.props.logIn(e.target.username.value, e.target.password.value)
-			.then(() => {
-				this.setState({...this.state, loading: false, error: ''});
-				this.props.history.push('/feed');
-			})
-			.catch(err => {
-				this.setState({...this.state, loading: false, error: err});
-			});
+			.then(() => this.props.history.push('/feed'))
+			.catch(err => this.setState({...this.state, fetching: this.state.fetching-1, error: err, username: '', password: ''}));
+	}
+	
+	onClearError() {
+		this.setState({...this.state, fetching: 0, error: ''});
 	}
 	
 	render() {
-		const {username, password, loading, error} = this.state;
+		const {username, password, fetching, error} = this.state;
 		
 		const fields = [
 			{label: 'Username', name: 'username', type: 'text', value: username, placeholder: 'mikeybob123'},
@@ -53,14 +54,10 @@ class LoginPage extends Component {
                     <p>Login to your EngineRoom account</p>
                 </div>
 
-                {error && (
-					<Message color='red'>
-						{error}
-					</Message>
-				)}
+                {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
 				<Form onSubmit={this.onSubmit} 
 						onChange={this.onChange} 
-						loading={loading}
+						loading={fetching !== 0}
 						fields={fields}	
                         buttonText='Log In' />
             </div>

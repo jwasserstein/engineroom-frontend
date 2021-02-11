@@ -3,24 +3,29 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
 import {getUsers, editProfile} from '../../store/actions/users';
 import AWS from 'aws-sdk';
+import Message from '../../components/Message';
 import './EditProfilePage.css';
 
-class EditProfile extends Component {
+class EditProfilePage extends Component {
     constructor(props){
         super(props);
 
+        const {authReducer, userReducer} = this.props;
+        const loggedInUser = userReducer.users[authReducer.userId];
+
         this.state = {
-            firstName: '',
-            lastName: '',
-            bio: '',
+            firstName: loggedInUser?.firstName || '',
+            lastName: loggedInUser?.lastName || '',
+            bio: loggedInUser?.bio || '',
             image: null,
-            loading: false,
-            error: ''
+            error: '',
+            fetching: 0
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onFileChange = this.onFileChange.bind(this);
+        this.onClearError = this.onClearError.bind(this);
     }
 
     checkMissingData() {
@@ -28,83 +33,87 @@ class EditProfile extends Component {
 
         // Check for missing data: loggedInUser
         if(!(authReducer.userId in userReducer.users)){
+            this.setState({...this.state, fetching: 1});
             getUsers([authReducer.userId])
                 .then(() => {
                     const loggedInUser = this.props.userReducer.users[authReducer.userId];
                     this.setState({
                         firstName: loggedInUser.firstName,
                         lastName: loggedInUser.lastName,
-                        bio: loggedInUser.bio
+                        bio: loggedInUser.bio,
+                        fetching: this.state.fetching-1
                     });
-                });
+                })
+                .catch(err => this.setState({...this.state, fetching: this.state.fetching-1, error: err}));
         }
     }
 
     componentDidMount() {
-        const {authReducer, userReducer} = this.props;
-
         document.title = 'EngineRoom | Edit Profile';
-        if(authReducer.userId in userReducer.users){
-            const loggedInUser = userReducer.users[authReducer.userId];
-            this.setState({
-                firstName: loggedInUser.firstName,
-                lastName: loggedInUser.lastName,
-                bio: loggedInUser.bio
-            });
-        } else {
-            this.checkMissingData();
-        }
+        this.checkMissingData();
     }
 
     componentDidUpdate() {
-        this.checkMissingData();
+        if(this.state.fetching === 0 && this.state.error === '') {
+            this.checkMissingData();
+        }
     }
 
     onChange(e){
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
-    onSubmit(){
+    onClearError() {
+		this.setState({...this.state, error: ''});
+	}
+
+    async onSubmit(){
         const {firstName, lastName, bio, image} = this.state;
-        const {history, authReducer, editProfile} = this.props;
+        const {history, authReducer, editProfile, userReducer} = this.props;
 
-        this.setState({...this.state, loading: true});
+        this.setState({...this.state, fetching: this.state.fetching+1});
 
-        if(!image) return this.setState({...this.state, loading: false, error: 'Please select an image first'});
-        const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
-        if(!fileExt) return this.setState({...this.state, loading: false, error: "Couldn't determine the file extension"});
-        const objectName = `${encodeURIComponent(authReducer.username)}/user-${String(Date.now())}${fileExt}`;
+        try {
+            let imageUrl = userReducer.users[authReducer.userId].imageUrl;
+            if(image) {
+                const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
+                if(!fileExt) return this.setState({...this.state, fetching: this.state.fetching-1, error: "Couldn't determine the file extension of your image"});
+                const objectName = `${encodeURIComponent(authReducer.username)}/user-${String(Date.now())}${fileExt}`;
 
-        const bucketName = 'engineroom';
-        const bucketRegion = 'us-east-1';
-        const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
+                const bucketName = 'engineroom';
+                const bucketRegion = 'us-east-1';
+                const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
 
-        AWS.config.update({
-            region: bucketRegion,
-            credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: identityPoolId
-            })
-        });
+                AWS.config.update({
+                    region: bucketRegion,
+                    credentials: new AWS.CognitoIdentityCredentials({
+                        IdentityPoolId: identityPoolId
+                    })
+                });
 
-        (new AWS.S3.ManagedUpload({
-            params: {
-                Bucket: bucketName,
-                Key: objectName,
-                Body: image
+                
+                const resp = await (new AWS.S3.ManagedUpload({
+                    params: {
+                        Bucket: bucketName,
+                        Key: objectName,
+                        Body: image
+                    }
+                })).promise();
+                imageUrl = resp.Location;
             }
-        })).promise()
-            .then(resp => editProfile(firstName, lastName, bio, resp.Location))
-            .then(() => {
-                this.setState({...this.state, 
-                    firstName: '',
-                    lastName: '',
-                    bio: '',
-                    image: null,
-                    loading: false,
-                    error: ''
-                }, () => history.push(`/users/${authReducer.userId}`));
-            })
-            .catch(err => console.log('Error uploading: ' + err.message));
+
+            this.setState({...this.state, fetching: this.state.fetching+1});
+            await editProfile(firstName, lastName, bio, imageUrl);
+            this.setState({...this.state, 
+                firstName: '',
+                lastName: '',
+                bio: '',
+                image: null,
+                fetching: this.state.fetching-1
+            }, () => history.push(`/users/${authReducer.userId}`));
+        } catch(err) {
+            this.setState({...this.state, fetching: this.state.fetching-1, error: err});
+        }
     }
 
     onFileChange(e){
@@ -113,13 +122,12 @@ class EditProfile extends Component {
 
     render() {
         const {userReducer, authReducer} = this.props;
-        const {firstName, lastName, bio, loading, image} = this.state;
-        const loggedInUser = userReducer.users[authReducer.userId];
-
-        if(!loggedInUser) return <div>Loading...</div>;
+        const {firstName, lastName, bio, fetching, image, error} = this.state;
+        const loggedInUser = userReducer.users[authReducer.userId] || {};
 
         return (
             <div className='EditProfilePage-container'>
+                {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                 <div className='EditProfilePage-title EditProfilePage-blob'>
                     <h2>Edit your Profile</h2>
                     <p>Edit your EngineRoom profile</p>
@@ -141,8 +149,7 @@ class EditProfile extends Component {
                         
                         <label htmlFor='bio'>Bio:</label>
                         <textarea id='bio' name='bio' value={bio} onChange={this.onChange} placeholder='Tell us about yourself...'></textarea>
-                        <button className='EditProfilePage-submit-button' onClick={this.onSubmit}>{loading ? 'Loading...' : 'Submit'}</button>
-
+                        <button className='EditProfilePage-submit-button' onClick={this.onSubmit}>{fetching ? 'Loading...' : 'Submit'}</button>
                     </div>
                 </div>
             </div>
@@ -157,7 +164,7 @@ function mapStateToProps(state){
     };
 }
 
-EditProfile.propTypes = {
+EditProfilePage.propTypes = {
     userReducer: PropTypes.object.isRequired,
     authReducer: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
@@ -165,4 +172,4 @@ EditProfile.propTypes = {
     editProfile: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, {getUsers, editProfile})(EditProfile);
+export default connect(mapStateToProps, {getUsers, editProfile})(EditProfilePage);

@@ -5,32 +5,70 @@ import {getRandomUsers} from '../../store/actions/users';
 import {getRandomCars} from '../../store/actions/cars';
 import User from '../../components/User';
 import Car from '../../components/Car';
+import Message from '../../components/Message';
 import './ExplorePage.css';
 
 class ExplorePage extends Component {
-    componentDidMount(){
-        document.title = 'EngineRoom | Explore';
+    constructor(props){
+        super(props);
+
+        this.state = {
+            fetching: 0,
+            error: ''
+        };
+
+        this.checkMissingData = this.checkMissingData.bind(this);
+        this.onClearError = this.onClearError.bind(this);
+    }
+
+    checkMissingData() {
+        let {fetching} = this.state;
         if(this.props.userReducer.randomUserIds.length === 0){
-            this.props.getRandomUsers(6);
+            fetching++;
+            this.props.getRandomUsers(6)
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
         if(this.props.carReducer.randomCarIds.length === 0){
-            this.props.getRandomCars(4);
+            fetching++;
+            this.props.getRandomCars(4)
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
+        }
+        if(fetching !== this.state.fetching){
+            this.setState({...this.state, fetching: fetching});
         }
     }
 
+    componentDidMount(){
+        document.title = 'EngineRoom | Explore';
+        this.checkMissingData();
+    }
+
+    componentDidUpdate(){
+        if(this.state.fetching === 0 && this.state.error === ''){
+            this.checkMissingData();
+        }
+    }
+
+    onClearError() {
+		this.setState({...this.state, error: ''});
+	}
+
     render() {
         const {carReducer, userReducer} = this.props;
-
-        if(!userReducer.randomUserIds.length || !carReducer.randomCarIds.length) return <div>Loading...</div>;
+        const {error} = this.state;
+        const randomCarIds = carReducer.randomCarIds || [];
+        const randomUserIds = userReducer.randomUserIds || [];
         
-        const carElements = carReducer.randomCarIds.map(id => {
-            const c = carReducer.cars[id];
+        const carElements = randomCarIds.map(id => {
+            const c = carReducer.cars[id] || {_id: id, name: '', imageUrl: '', userId: ''};
             return (
                 <Car name={c.name} imageUrl={c.imageUrl} userId={c.user} key={c._id} style={{marginLeft: '7.5px', marginRight: '7.5px'}}/>
             )
         });
-        const userElements = userReducer.randomUserIds.map(id => {
-            const u = userReducer.users[id];
+        const userElements = randomUserIds.map(id => {
+            const u = userReducer.users[id] || {_id: id, firstName: '', lastName: '', imageUrl: ''};
             return (
                 <User firstName={u.firstName} lastName={u.lastName} imageUrl={u.imageUrl} id={u._id} key={u._id} />
             )
@@ -39,6 +77,7 @@ class ExplorePage extends Component {
         return (
             <div className='ExplorePage-container'>
                 <div className='ExplorePage-inner-container'>
+                    {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                     <div className='ExplorePage-title ExplorePage-blob'>
                         <h2>People</h2>
                         <p>View a random selection of EngineRoom users</p>

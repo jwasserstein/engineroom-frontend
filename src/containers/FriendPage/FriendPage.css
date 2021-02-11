@@ -12,6 +12,7 @@
     width: 100%;
     flex-basis: 700px;
     flex-shrink: 1;
+    margin-left: 20px;
 }
 
 .FriendPage-blob {
@@ -54,6 +55,10 @@
     .FriendPage-container {
         flex-direction: column;
         align-items: center;
+    }
+
+    .FriendPage-inner-container {
+        margin-left: 0;
     }
 
     .FriendPage-title {

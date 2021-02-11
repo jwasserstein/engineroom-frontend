@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import UserAside from '../../components/UserAside';
+import Message from '../../components/Message';
 import {getUsers} from '../../store/actions/users';
 import {addCar} from '../../store/actions/cars';
 import AWS from 'aws-sdk';
@@ -20,13 +21,14 @@ class NewCarPage extends Component {
             power: '',
             torque: '',
             image: null,
-            loading: false,
+            fetching: 0,
             error: ''
         };
 
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onFileChange = this.onFileChange.bind(this);
+        this.onClearError = this.onClearError.bind(this);
     }
 
     checkMissingData() {
@@ -34,7 +36,10 @@ class NewCarPage extends Component {
 
         // Check for missing data: loggedInUser
         if(!(authReducer.userId in userReducer.users)){
-            getUsers([authReducer.userId]);
+            this.setState({...this.state, fetching: this.state.fetching+1});
+            getUsers([authReducer.userId])
+                .catch(err => this.setState({...this.state, error: err}))
+                .finally(() => this.setState({...this.state, fetching: this.state.fetching-1}));
         }
     }
 
@@ -44,70 +49,78 @@ class NewCarPage extends Component {
     }
 
     componentDidUpdate() {
-        this.checkMissingData();
+        if(this.state.fetching === 0 && this.state.error === ''){
+            this.checkMissingData();
+        }
     }
 
     onChange(e){
         this.setState({...this.state, [e.target.name]: e.target.value});
     }
 
-    onSubmit(){
+    async onSubmit(){
         const {make, model, year, modifications, accelTime, power, torque, image} = this.state;
         const {addCar, history, match, authReducer} = this.props;
 
-        this.setState({...this.state, loading: true});
-
-        if(!image) return this.setState({...this.state, loading: false, error: 'Please select an image first'});
-        const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
-        if(!fileExt) return this.setState({...this.state, loading: false, error: "Couldn't determine the file extension"});
-        const objectName = `${encodeURIComponent(authReducer.username)}/car-${String(Date.now())}${fileExt}`;
-
-        const bucketName = 'engineroom';
-        const bucketRegion = 'us-east-1';
-        const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
-
-        AWS.config.update({
-            region: bucketRegion,
-            credentials: new AWS.CognitoIdentityCredentials({
-                IdentityPoolId: identityPoolId
-            })
-        });
-
-        (new AWS.S3.ManagedUpload({
-            params: {
-                Bucket: bucketName,
-                Key: objectName,
-                Body: image
+        this.setState({...this.state, fetching: this.state.fetching+1});
+        try {
+            let imageUrl = 'https://engineroom.s3.amazonaws.com/default-car.png';
+            if(image){
+                const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
+                if(!fileExt) return this.setState({...this.state, error: "Couldn't determine the file extension"});
+                const objectName = `${encodeURIComponent(authReducer.username)}/car-${String(Date.now())}${fileExt}`;
+    
+                const bucketName = 'engineroom';
+                const bucketRegion = 'us-east-1';
+                const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
+    
+                AWS.config.update({
+                    region: bucketRegion,
+                    credentials: new AWS.CognitoIdentityCredentials({
+                        IdentityPoolId: identityPoolId
+                    })
+                });
+    
+                const resp = await (new AWS.S3.ManagedUpload({
+                    params: {
+                        Bucket: bucketName,
+                        Key: objectName,
+                        Body: image
+                    }
+                })).promise();
+                imageUrl = resp.Location;
             }
-        })).promise()
-            .then(resp => addCar(make, model, year, modifications, accelTime, power, torque, resp.Location))
-            .then(() => {
-                this.setState({...this.state, 
-                    make: '',
-                    model: '',
-                    year: '',
-                    modifications: '',
-                    accelTime: '',
-                    power: '',
-                    torque: '',
-                    image: null,
-                    loading: false,
-                    error: ''
-                }, () => history.push(`/users/${match.params.userId}/cars`));
-            })
-            .catch(err => console.log('Error uploading: ' + err.message));
+
+            await addCar(make, model, year, modifications, accelTime, power, torque, imageUrl);
+            this.setState({...this.state, 
+                make: '',
+                model: '',
+                year: '',
+                modifications: '',
+                accelTime: '',
+                power: '',
+                torque: '',
+                image: null,
+                fetching: 0,
+                error: ''
+            }, () => history.push(`/users/${match.params.userId}/cars`));
+        } catch(err) {
+            this.setState({...this.state, fetching: 0, error: err.message});
+        }
     }
 
     onFileChange(e){
         this.setState({...this.state, image: e.target.files[0]});
     }
 
+    onClearError() {
+		this.setState({...this.state, error: ''});
+	}
+
     render() {
         const {userReducer, authReducer, match} = this.props;
-        const {make, model, year, modifications, accelTime, power, torque, loading, image} = this.state;
-        const loggedInUser = userReducer.users[authReducer.userId];
-
-        if(!loggedInUser) return <div>Loading...</div>;
+        const {make, model, year, modifications, accelTime, power, torque, fetching, image, error} = this.state;
+        const loggedInUser = userReducer.users[authReducer.userId] || {_id: '', friends: [], firstName: '', lastName: '', imageUrl: ''};
 
         return (
             <div className='NewCarPage-container'>
@@ -124,6 +137,7 @@ class NewCarPage extends Component {
                 />
 
                 <div className='NewCarPage-inner-container'>
+                    {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                     <div className='NewCarPage-title NewCarPage-blob'>
                         <h2>Add a Car</h2>
                         <p>Add a car to your EngineRoom profile</p>
@@ -161,14 +175,14 @@ class NewCarPage extends Component {
                         <div className='NewCarPage-form-row'>
                             <div>
                                 <label htmlFor='image'>Image:</label>
-                                <img src={image ? URL.createObjectURL(image) : 'http://localhost:3001/images/default-car.png'} alt='preview'/>
+                                <img src={image ? URL.createObjectURL(image) : 'https://engineroom.s3.amazonaws.com/default-car.png'} alt='preview'/>
                                 <label htmlFor='image'>Browse...</label>
                                 <input type='file' id='image' name='image' accept='image/*' onChange={this.onFileChange}/>
                             </div>
                             <div>
                                 <label htmlFor='modifications'>Modifications:</label>
                                 <textarea id='modifications' name='modifications' value={modifications} onChange={this.onChange} placeholder='K&N cold air intake, Bridgestone Ecopia tires'></textarea>
-                                <button className='NewCarPage-submit-button' onClick={this.onSubmit}>{loading ? 'Loading...' : 'Submit'}</button>
+                                <button className='NewCarPage-submit-button' onClick={this.onSubmit}>{fetching !== 0 ? 'Loading...' : 'Submit'}</button>
                             </div>
                         </div>
                     </div>
