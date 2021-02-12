@@ -2,6 +2,7 @@
     width: 90%;
     max-width: 400px;
     margin: auto;
+    padding-bottom: 15px;
 }
 
 .LoginPage-blob {
@@ -12,7 +13,7 @@
 
 .LoginPage-title {
     padding: 10px;
-    margin: 30px 0 20px 0;
+    margin: 30px 0 15px 0;
 }
 
 .LoginPage-title h2 {

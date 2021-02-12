@@ -6,7 +6,6 @@
     justify-content: space-around;
     align-items: flex-start;
     padding-top: 30px;
-    margin-bottom: 20px;
 }
 
 .WallPage-feed-container {
@@ -74,6 +73,10 @@
     }
 
     .WallPage-user-container {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
+    }
+
+    .WallPage-feed-container {
+        flex-basis: 0;
     }
 }

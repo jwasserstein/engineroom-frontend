@@ -5,7 +5,7 @@
     flex-direction: row;
     justify-content: space-around;
     align-items: flex-start;
-    padding: 30px 0 20px 0;
+    padding: 30px 0 0 0;
 }
 
 .CarPage-title-container {
@@ -41,7 +41,7 @@
 
 .CarPage-title {
     padding: 10px;
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
     flex-basis: 0;
     flex-grow: 1;
 }
@@ -83,12 +83,13 @@
     }
 
     .CarPage-inner-container {
-        margin: 20px 0 0 0;
+        margin: 15px 0 0 0;
     }
 }
 
 @media (max-width: 600px){
     .CarPage-inner-container {
         max-width: 325px;
+        flex-basis: 0;
     }
 }

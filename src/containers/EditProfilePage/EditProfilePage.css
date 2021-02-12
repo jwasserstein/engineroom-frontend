@@ -6,7 +6,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: stretch;
-    padding: 30px 0 20px 0;
+    padding: 30px 0 0 0;
 }
 
 .EditProfilePage-blob {
@@ -17,7 +17,7 @@
 
 .EditProfilePage-title {
     padding: 10px;
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
 }
 
 .EditProfilePage-title h2 {
@@ -34,7 +34,7 @@
 
 .EditProfilePage-form {
     padding: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -60,7 +60,7 @@
     border: 1px solid rgba(0, 0, 0, 0.35);
     padding: 5px 10px;
     font-size: 16px;
-    margin: 3px 0 20px 0;
+    margin: 3px 0 15px 0;
 }
 
 .EditProfilePage-container::placeholder {
@@ -146,7 +146,7 @@
     }
 
     .EditProfilePage-title {
-        margin: 0 0 20px 0;
+        margin: 0 0 15px 0;
     }
 
     .EditProfilePage-form label[for='image']:last-of-type {

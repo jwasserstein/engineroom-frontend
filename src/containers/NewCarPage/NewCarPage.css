@@ -12,7 +12,7 @@
     width: 100%;
     flex-basis: 700px;
     flex-shrink: 1;
-    margin-left: 20px;
+    margin-left: 15px;
 }
 
 .NewCarPage-blob {
@@ -23,7 +23,7 @@
 
 .NewCarPage-title {
     padding: 10px;
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
 }
 
 .NewCarPage-title h2 {
@@ -80,7 +80,7 @@
     border: 1px solid rgba(0, 0, 0, 0.35);
     padding: 5px 10px;
     font-size: 16px;
-    margin: 3px 0 20px 0;
+    margin: 3px 0 15px 0;
 }
 
 .NewCarPage-container::placeholder {
@@ -159,7 +159,7 @@
     border-radius: 15px;
 }
 
-@media (max-width: 900px){
+@media (max-width: 950px){
     .NewCarPage-container {
         flex-direction: column;
         align-items: center;
@@ -170,7 +170,7 @@
     }
 
     .NewCarPage-title {
-        margin: 20px 0 20px 0;
+        margin: 15px 0;
     }
 
     .NewCarPage-spacer {
@@ -182,10 +182,6 @@
         flex-direction: column;
     }
 
-    .NewCarPage-form button {
-        margin: 3px 0 20px 0;
-    }
-
     .NewCarPage-form-row>div:not(.NewCarPage-power) {
         margin: 0;
     }
@@ -195,6 +191,6 @@
     }
 
     .NewCarPage-form label[for='image']:last-of-type {
-        margin-bottom: 20px;
+        margin-bottom: 15px;
     }
 }

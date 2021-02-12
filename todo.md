@@ -1,10 +1,6 @@
 # Todo
-- Standardize all margins between blobs to either 15px or 20px.
-- Verify responsiveness of all pages, including the middle-ground between desktop and mobile
-- Ensure you can edit a profile with the default image
-- Create dummy accounts that new users are friends with by default as a demo
-- Refresh on every single page to check for missing data
 - Review security aspect of AWS upload
+- Seed more posts/comments/likes on default accounts
 
 
 ## Right Now
