@@ -161,7 +161,11 @@ class FeedPage extends Component {
                         <h2>Explore Friends</h2>
                     </div>
                     <div className='FeedPage-people-container'>
-                        {userElements}
+                        {userElements.length > 0 ? userElements : (
+                            <div className='FeedPage-no-elements FeedPage-blob'>
+                                <p>There aren't any users to show</p>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className='FeedPage-feed-container'>
@@ -174,14 +178,22 @@ class FeedPage extends Component {
                         <textarea placeholder='Add a post...' name='postText' value={postText} onChange={this.onChange}></textarea>
                         <button><i className="fa fa-arrow-right" aria-hidden="true"></i></button>
                     </form>
-                    {postElements}
+                    {postElements.length > 0 ? postElements : (
+                        <div className='FeedPage-no-elements FeedPage-blob'>
+                            <p>There aren't any posts to show</p>
+                        </div>
+                    )}
                 </div>
                 <div className='FeedPage-cars-container'>
                     <div className='FeedPage-title FeedPage-blob'>
                         <h2>Explore Cars</h2>
                     </div>
                     <div className='FeedPage-car-container'>
-                        {carElements}
+                        {carElements.length > 0 ? carElements : (
+                            <div className='FeedPage-no-elements FeedPage-blob'>
+                                <p>There aren't any cars to show</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

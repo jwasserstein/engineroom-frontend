@@ -83,7 +83,11 @@ class ExplorePage extends Component {
                         <p>View a random selection of EngineRoom users</p>
                     </div>
                     <div className='ExplorePage-people-container'>
-                        {userElements}
+                        {userElements.length > 0 ? userElements : (
+                            <div className='ExplorePage-no-elements ExplorePage-blob'>
+                                <p>There aren't any users to show</p>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <div className='ExplorePage-inner-container'>
@@ -92,7 +96,11 @@ class ExplorePage extends Component {
                         <p>View a random selection of EngineRoom users' cars</p>
                     </div>
                     <div className='ExplorePage-car-container'>
-                        {carElements}
+                        {carElements.length > 0 ? carElements : (
+                            <div className='ExplorePage-no-elements ExplorePage-blob'>
+                                <p>There aren't any cars to show</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

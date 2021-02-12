@@ -49,6 +49,17 @@
     text-align: center;
 }
 
+.FeedPage-no-elements {
+    padding: 15px 10px;
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+
+.FeedPage-no-elements p {
+    margin: 0;
+    text-align: center;
+}
+
 .FeedPage-people-container {
     display: flex;
     flex-direction: row;

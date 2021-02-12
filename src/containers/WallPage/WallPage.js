@@ -165,14 +165,22 @@ class WallPage extends Component {
                         <h2>{user.firstName}'s Wall</h2>
                         <p>See what's on {user.firstName}'s mind</p>
                     </div>
-                    {postElements}
+                    {postElements.length > 0 ? postElements : (
+                        <div className='WallPage-no-elements WallPage-blob'>
+                            <p>There aren't any posts to show</p>
+                        </div>
+                    )}
                 </div>
 
                 <div className='WallPage-cars-container'>
                     <div className='WallPage-title WallPage-blob'>
                         <h2>{user.firstName}'s Cars</h2>
                     </div>
-                    {carElements}
+                    {carElements.length > 0 ? carElements : (
+                        <div className='WallPage-no-elements WallPage-blob'>
+                        <p>There aren't any cars to show</p>
+                    </div>
+                    )}
                 </div>
             </div>
         );

@@ -44,6 +44,17 @@
     text-align: center;
 }
 
+.WallPage-no-elements {
+    padding: 15px 10px;
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+
+.WallPage-no-elements p {
+    margin: 0;
+    text-align: center;
+}
+
 .WallPage-car-container {
     display: flex;
     flex-direction: row;

@@ -3,9 +3,8 @@
 - Verify responsiveness of all pages, including the middle-ground between desktop and mobile
 - Ensure you can edit a profile with the default image
 - Create dummy accounts that new users are friends with by default as a demo
-- Add "You don't have any posts" if there are no posts, cars, etc.
 - Refresh on every single page to check for missing data
-- When user updates their profile picture, delete old one?
+- Review security aspect of AWS upload
 
 
 ## Right Now
@@ -17,3 +16,4 @@
 - Add progress bar to image uploads for car and profile images.  They're kinda slow.
 - Add search functionality or some other way of finding other users that aren't suggested by <ExplorePage> or already on the feed
 - Add infinite scrolling
+- When user updates their profile picture or car picture, delete old one
