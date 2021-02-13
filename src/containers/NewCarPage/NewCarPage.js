@@ -68,16 +68,16 @@ class NewCarPage extends Component {
             if(image){
                 const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
                 if(!fileExt) return this.setState({...this.state, error: "Couldn't determine the file extension"});
-                const objectName = `${encodeURIComponent(authReducer.username)}/car-${String(Date.now())}${fileExt}`;
+                const objectName = `${authReducer.awsIdentityId}/car-${String(Date.now())}${fileExt}`;
     
                 const bucketName = 'engineroom';
                 const bucketRegion = 'us-east-1';
-                const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
     
                 AWS.config.update({
                     region: bucketRegion,
-                    credentials: new AWS.CognitoIdentityCredentials({
-                        IdentityPoolId: identityPoolId
+                    credentials: new AWS.WebIdentityCredentials({
+                        RoleArn: 'arn:aws:iam::424331035336:role/Cognito_engineroomAuth_Role',
+                        WebIdentityToken: localStorage.awsToken
                     })
                 });
     

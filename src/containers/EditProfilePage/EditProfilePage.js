@@ -78,16 +78,16 @@ class EditProfilePage extends Component {
             if(image) {
                 const fileExt = image.name.match(/\..+$/)[0]?.toLowerCase();
                 if(!fileExt) return this.setState({...this.state, fetching: this.state.fetching-1, error: "Couldn't determine the file extension of your image"});
-                const objectName = `${encodeURIComponent(authReducer.username)}/user-${String(Date.now())}${fileExt}`;
+                const objectName = `${authReducer.awsIdentityId}/user-${String(Date.now())}${fileExt}`;
 
                 const bucketName = 'engineroom';
                 const bucketRegion = 'us-east-1';
-                const identityPoolId = 'us-east-1:a5f8a152-c8b9-4a8a-9505-03dcd77f39b1';
 
                 AWS.config.update({
                     region: bucketRegion,
-                    credentials: new AWS.CognitoIdentityCredentials({
-                        IdentityPoolId: identityPoolId
+                    credentials: new AWS.WebIdentityCredentials({
+                        RoleArn: 'arn:aws:iam::424331035336:role/Cognito_engineroomAuth_Role',
+                        WebIdentityToken: localStorage.awsToken
                     })
                 });
 
@@ -112,7 +112,7 @@ class EditProfilePage extends Component {
                 fetching: this.state.fetching-1
             }, () => history.push(`/users/${authReducer.userId}`));
         } catch(err) {
-            this.setState({...this.state, fetching: this.state.fetching-1, error: err});
+            this.setState({...this.state, fetching: this.state.fetching-1, error: err.message});
         }
     }
 

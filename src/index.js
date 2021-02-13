@@ -14,7 +14,7 @@ const store = configureStore();
 if(localStorage.getItem('token')){
 	const decoded = jwtdecode(localStorage.getItem('token'));
 	if(Date.now()/1000 - decoded.iat < 3600){
-        store.dispatch({type: LOG_IN, id: decoded.id, username: decoded.username});
+        store.dispatch({type: LOG_IN, id: decoded.id, username: decoded.username, awsIdentityId: decoded.awsIdentityId});
 	} else {
 		localStorage.removeItem('token');
 	}
