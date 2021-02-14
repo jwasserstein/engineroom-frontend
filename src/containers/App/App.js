@@ -47,10 +47,10 @@ class App extends Component {
                         <Route path='/editProfile' component={withAuth(EditProfilePage)} />
                         <Route path='/password' component={withAuth(PasswordPage)} />
                         <Route path='/profile' component={withAuth(ProfilePage)} />
-                        <Route path='/users/:userId/cars/new' component={withAuth(NewCarPage)} />
-                        <Route path='/users/:userId/cars' component={withAuth(CarPage)} />
-                        <Route path='/users/:userId/friends' component={withAuth(FriendPage)} />
-                        <Route path='/users/:userId' component={withAuth(WallPage)} />
+                        <Route path='/users/:userId?/cars/new' component={withAuth(NewCarPage)} />
+                        <Route path='/users/:userId?/cars' component={withAuth(CarPage)} />
+                        <Route path='/users/:userId?/friends' component={withAuth(FriendPage)} />
+                        <Route path='/users/:userId?' component={withAuth(WallPage)} />
                         <Route path='/feed' component={withAuth(FeedPage)} />
                         <Route path='/explore' component={withAuth(ExplorePage)} />
                         <Route path='/login' component={LoginPage} />

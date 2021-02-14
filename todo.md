@@ -1,10 +1,5 @@
 # Todo
-- Seed more posts/comments/likes on default accounts
 
-
-## Right Now
-- Deployment
-- Add to portfolio
 
 ## Potential Expansion Ideas
 - Add ability to delete and edit cars.  Add red X in top right corner to delete, pencil icon to edit.  Editing brings you back to the new car page with the fields pre-populated with the car's existing data.

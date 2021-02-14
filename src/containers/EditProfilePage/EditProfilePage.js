@@ -96,7 +96,7 @@ class EditProfilePage extends Component {
                 const existingImage = loggedInUser.imageUrl.match(/(user|car)-\d+.\w+$/);
                 if(existingImage){
                     const s3 = new AWS.S3();
-                    const deleteResp = await s3.deleteObject({
+                    await s3.deleteObject({
                         Bucket: bucketName,
                         Key: `${authReducer.awsIdentityId}/${existingImage[0]}`
                     }).promise();
