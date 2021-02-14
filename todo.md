@@ -1,5 +1,4 @@
 # Todo
-- Review security aspect of AWS upload
 - Seed more posts/comments/likes on default accounts
 
 

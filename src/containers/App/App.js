@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import {HashRouter as Router, Switch, Route} from 'react-router-dom';
 import {logOut} from '../../store/actions/auth';
 import {connect} from 'react-redux';
 import PropTypes from 'prop-types';
