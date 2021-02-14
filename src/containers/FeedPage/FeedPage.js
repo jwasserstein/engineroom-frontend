@@ -159,6 +159,7 @@ class FeedPage extends Component {
                     {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}
                     <div className='FeedPage-title FeedPage-blob'>
                         <h2>Explore Friends</h2>
+                        <p>Find new friends</p>
                     </div>
                     <div className='FeedPage-people-container'>
                         {userElements.length > 0 ? userElements : (
@@ -187,6 +188,7 @@ class FeedPage extends Component {
                 <div className='FeedPage-cars-container'>
                     <div className='FeedPage-title FeedPage-blob'>
                         <h2>Explore Cars</h2>
+                        <p>View other user's cars</p>
                     </div>
                     <div className='FeedPage-car-container'>
                         {carElements.length > 0 ? carElements : (
