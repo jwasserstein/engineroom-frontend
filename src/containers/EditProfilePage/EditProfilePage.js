@@ -70,6 +70,7 @@ class EditProfilePage extends Component {
     async onSubmit(){
         const {firstName, lastName, bio, image} = this.state;
         const {history, authReducer, editProfile, userReducer} = this.props;
+        const loggedInUser = userReducer.users[authReducer.userId];
 
         this.setState({...this.state, fetching: this.state.fetching+1});
 
@@ -87,10 +88,19 @@ class EditProfilePage extends Component {
                     region: bucketRegion,
                     credentials: new AWS.WebIdentityCredentials({
                         RoleArn: 'arn:aws:iam::424331035336:role/Cognito_engineroomAuth_Role',
-                        WebIdentityToken: localStorage.awsToken
+                        WebIdentityToken: localStorage.awsToken,
+                        DurationSeconds: 3600
                     })
                 });
 
+                const existingImage = loggedInUser.imageUrl.match(/(user|car)-\d+.\w+$/);
+                if(existingImage){
+                    const s3 = new AWS.S3();
+                    const deleteResp = await s3.deleteObject({
+                        Bucket: bucketName,
+                        Key: `${authReducer.awsIdentityId}/${existingImage[0]}`
+                    }).promise();
+                }
                 
                 const resp = await (new AWS.S3.ManagedUpload({
                     params: {

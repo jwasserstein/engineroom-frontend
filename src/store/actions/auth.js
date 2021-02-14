@@ -62,6 +62,7 @@ export function signUp(username, password, firstName, lastName){
 export function logOut() {
 	return dispatch => {
 		localStorage.removeItem('token');
+		localStorage.removeItem('awsToken');
 		dispatch({type: REMOVE_CARS});
 		dispatch({type: REMOVE_POSTS});
 		dispatch({type: REMOVE_USERS});
