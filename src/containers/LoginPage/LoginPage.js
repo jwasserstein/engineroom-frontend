@@ -50,8 +50,8 @@ class LoginPage extends Component {
 		return (
 			<div className='LoginPage-container'>
                 <div className='LoginPage-title LoginPage-blob'>
-                    <h2>Login</h2>
-                    <p>Login to your EngineRoom account</p>
+                    <h2>Log In</h2>
+                    <p>Log in to your EngineRoom account</p>
                 </div>
 
                 {error && (<Message color='red' onClearError={this.onClearError}>{error}</Message>)}

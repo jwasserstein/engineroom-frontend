@@ -16,17 +16,16 @@ class AboutPage extends Component {
 
                 <div className='AboutPage-about AboutPage-blob'>
                     <p>
-                        EngineRoom is a demonstration social media application made for 
-                        the purposes of learning React and Redux. It allows users to add 
-                        their cars, find friends, make posts, and make comments.  It was 
-                        designed in Figma and uses the following technologies:
+                        EngineRoom is a social media application for car enthusiasts.  
+                        It allows users to make posts, make comments, upload pictures 
+                        of their cars, set a profile picture, and find friends who share 
+                        car interests.  It’s a single page, fullstack application 
+                        that uses React and Redux on the frontend and Node.js, Express, and 
+                        MongoDB on the backend. The frontend is served by GitHub Pages and 
+                        the backend runs on Heroku with a managed database provided by MongoDB 
+                        Atlas. It was designed using Figma.
                     </p>
-                    <ul>
-                        <li><strong>Frontend</strong>: React and Redux</li>
-                        <li><strong>Backend</strong>: Node.js and Express</li>
-                        <li><strong>Database</strong>: MongoDB</li>
-                    </ul>
-                    <p className='AboutPage-handcrafted'>Hand-crafted with <span className='AboutPage-heart'>❤</span> in Glastonbury, Connecticut.</p>
+                    <p className='AboutPage-handcrafted'>Handcrafted with <span className='AboutPage-heart'>❤</span> in Glastonbury, Connecticut.</p>
                 </div>
             </div>
         );
