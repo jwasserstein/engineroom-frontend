@@ -8,4 +8,4 @@ This project was made with `create-react-app`, so it can be run in development w
 This project is currently deployed on Heroku here: [https://engineroom.wasserstein.dev](https://engineroom.wasserstein.dev).
 
 ## Backend
-The backend code can be found here: [https://github.com/jwasserstein/engineroom-frontend](https://github.com/jwasserstein/engineroom-frontend).
+The backend code can be found here: [https://github.com/jwasserstein/engineroom-backend](https://github.com/jwasserstein/engineroom-backend).
