@@ -28,9 +28,8 @@
 }
 
 .AboutPage-about {
-    padding: 15px 15px 60px 15px;
+    padding: 15px;
     margin-top: 15px;
-    position: relative;
 }
 
 .AboutPage-about p {
@@ -45,15 +44,49 @@
     font-weight: 500;
 }
 
-.AboutPage-handcrafted {
+p.AboutPage-handcrafted {
     width: 100%;
     text-align: center;
     font-size: 14px;
-    position: absolute;
-    bottom: 15px;
-    left: 0;
+    margin-top: 20px;
 }
 
 .AboutPage-heart {
     color: red;
+}
+
+.AboutPage-icon-container {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.AboutPage-icon-container a {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: black;
+    text-decoration: none;
+    margin: 0 15px;
+}
+
+.AboutPage-icon-container a:hover {
+    color: #808080;
+}
+
+.AboutPage-icon-container p {
+    margin: 0;
+    font-size: 14px;
+}
+
+.AboutPage-icon-container p:nth-of-type(2) {
+    font-size: 10px;
+}
+
+.AboutPage-icon-container .iconify {
+    width: 35px;
+    height: 35px;
 }
